@@ -34,3 +34,7 @@
 # VSCode configuration
 .vscode
 *.sh
+
+# Experimental result and tools
+result/*
+cal_statistics.cpp
