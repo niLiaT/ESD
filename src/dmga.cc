@@ -13,14 +13,14 @@ void dmga(int dimension, int population) {
 
     initialization(monkeys);
 
-    for (int iteration = 0; iteration < 2000; ++iteration) {
+    for (int iteration = 0; iteration < 100000; ++iteration) {
         climb(monkeys);
 
         watch_jump(monkeys, best_fitness);
 
         somersault(monkeys);
 
-        cout << best_fitness << endl;
+        cout << iteration << "," << best_fitness << endl;
     }
 }
 
