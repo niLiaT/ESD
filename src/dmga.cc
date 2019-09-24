@@ -2,7 +2,7 @@
 #include "constraint.h"
 #include "fitness.h"
 
-#define step_length 0.00001
+#define step_length 0.0003
 #define eyesight 0.5
 
 template <typename T> int sgn (T val);
@@ -13,7 +13,7 @@ void dmga(int dimension, int population) {
 
     initialization(monkeys);
 
-    for (int iteration = 0; iteration < 100000; ++iteration) {
+    for (int iteration = 0; iteration < 2000; ++iteration) {
         climb(monkeys);
 
         watch_jump(monkeys, best_fitness);
