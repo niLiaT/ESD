@@ -14,10 +14,10 @@ class Monkey {
         vector<float> position;
 };
 
-void dmga(int dimension, int population);
+void dmga(const int evaluationTimes, float step_length, float eyesight, int dimension, int population);
 void initialization(vector<Monkey> &monkeys);
-void climb(vector<Monkey> &monkeys);
-void watch_jump(vector<Monkey> &monkeys, float &best_fitness);
+void climb(vector<Monkey> &monkeys, const float step_length);
+void watch_jump(vector<Monkey> &monkeys, float &best_fitness, const float eyesight, int *evaluationTimes);
 void somersault(vector<Monkey> &monkeys);
 
 #endif

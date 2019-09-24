@@ -2,25 +2,23 @@
 #include "constraint.h"
 #include "fitness.h"
 
-#define step_length 0.0003
-#define eyesight 0.5
-
 template <typename T> int sgn (T val);
 
-void dmga(int dimension, int population) {
+void dmga(const int evaluationTimes, const float step_length, const float eyesight, int dimension, int population) {
+    int iteration = 0;
     float best_fitness = 0;
     vector<Monkey> monkeys(population, Monkey(dimension));
 
     initialization(monkeys);
 
-    for (int iteration = 0; iteration < 2000; ++iteration) {
-        climb(monkeys);
+    while (iteration < evaluationTimes) {
+        climb(monkeys, step_length);
 
-        watch_jump(monkeys, best_fitness);
+        watch_jump(monkeys, best_fitness, eyesight, &iteration);
 
         somersault(monkeys);
 
-        cout << iteration << "," << best_fitness << endl;
+        cout << iteration / population << "," << best_fitness << endl;
     }
 }
 
@@ -38,7 +36,7 @@ void initialization(vector<Monkey> &monkeys) {
     }
 }
 
-void climb(vector<Monkey> &monkeys) {
+void climb(vector<Monkey> &monkeys, const float step_length) {
     vector<float> pseudo_gradient, temp, candidate;
     float fitness_differential;
 
@@ -74,7 +72,7 @@ void climb(vector<Monkey> &monkeys) {
     }
 }
 
-void watch_jump(vector<Monkey> &monkeys, float &best_fitness) {
+void watch_jump(vector<Monkey> &monkeys, float &best_fitness, const float eyesight, int *iteration) {
     vector<float> candidate;
 
     for (vector<Monkey>::iterator each_monkey = monkeys.begin(); each_monkey != monkeys.end(); ++each_monkey) {
@@ -96,6 +94,8 @@ void watch_jump(vector<Monkey> &monkeys, float &best_fitness) {
         if (fitness_func(each_monkey->position[0], each_monkey->position[1]) > best_fitness) {
             best_fitness = fitness_func(each_monkey->position[0], each_monkey->position[1]);
         }
+
+        *iteration += 1;
 
         candidate.clear();
     }
