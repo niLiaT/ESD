@@ -38,3 +38,6 @@
 # Experimental result and tools
 result/*
 cal_statistics.cpp
+
+#dataset
+dataset/*
