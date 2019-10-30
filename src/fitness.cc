@@ -1,5 +1,11 @@
 #include "fitness.h"
 
-float fitness_func(float x1, float x2) {
-    return pow(sin(2 * M_PI * x1), 3) * sin(2 * M_PI * x2) / (pow(x1, 3) * (x1 + x2));
+int one_max(vector<bool> solution) {
+    int sum = 0;
+
+    for (vector<bool>::iterator each_bit = solution.begin(); each_bit != solution.end(); ++each_bit) {
+        sum += *each_bit;
+    }
+
+    return sum;
 }

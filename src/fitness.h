@@ -3,7 +3,10 @@
 
 #include <iostream>
 #include <math.h>
+#include <vector>
 
-float fitness_func(float x1, float x2);
+using namespace std;
+
+int one_max(vector<bool>);
 
 #endif

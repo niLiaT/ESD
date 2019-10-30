@@ -11,7 +11,8 @@ class Monkey {
     public:
         Monkey(int);
     
-        vector<float> position;
+        vector<bool> position;
+        int fitness;
 };
 
 void dmga(const int evaluationTimes, float step_length, float eyesight, int dimension, int population);
