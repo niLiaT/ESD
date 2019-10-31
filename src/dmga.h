@@ -15,10 +15,12 @@ class Monkey {
         int fitness;
 };
 
-void dmga(const int evaluationTimes, float step_length, float eyesight, int dimension, int population);
+void dmga(const int evaluationTimes, int dimension, int population);
 void initialization(vector<Monkey> &monkeys);
-void climb(vector<Monkey> &monkeys, const float step_length);
-void watch_jump(vector<Monkey> &monkeys, float &best_fitness, const float eyesight, int *evaluationTimes);
+void climb(vector<Monkey> &monkeys);
+void watch_jump(vector<Monkey> &monkeys);
+void cooperation(vector<Monkey> &monkeys);
+void crossover_mutation(vector<Monkey> &monkeys);
 void somersault(vector<Monkey> &monkeys);
 
 #endif
