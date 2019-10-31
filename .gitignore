@@ -41,3 +41,6 @@ cal_statistics.cpp
 
 #dataset
 dataset/*
+
+#test file
+test/*
