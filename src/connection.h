@@ -6,10 +6,11 @@
 #include <fstream>
 #include <math.h>
 #include <time.h>
+#include <float.h>
 
 using namespace std;
 
-extern int gateway_number;
+extern int gate_way_number;
 extern int fog_device_number;
 extern int edge_device_number;
 extern int agv_number;
@@ -20,6 +21,7 @@ class Gate_way {
 
         int x;
         int y;
+        bool status;
 };
 
 class Fog_device {
@@ -28,6 +30,8 @@ class Fog_device {
 
         int x;
         int y;
+        bool status;
+        Gate_way *link;
 };
 
 class Edge_device {
@@ -36,6 +40,8 @@ class Edge_device {
         
         int x;
         int y;
+        bool status;
+        Fog_device *link;
 };
 
 class Agv {
@@ -44,6 +50,7 @@ class Agv {
 
         int x;
         int y;
+        Edge_device *link;
 };
 
 extern vector<Gate_way> gate_ways;

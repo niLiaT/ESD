@@ -131,13 +131,13 @@ void jump(Monkey &monkey, int start_bit, int device_number) {
 void watch_jump(vector<Monkey> &monkeys) {
     for (vector<Monkey>::iterator each_monkey = monkeys.begin(); each_monkey != monkeys.end(); ++each_monkey) {
         for (int jump_number = 0; jump_number < max_number; ++jump_number) {
-            jump(*each_monkey, 0, gateway_number);
+            jump(*each_monkey, 0, gate_way_number);
         }
         for (int jump_number = 0; jump_number < max_number; ++jump_number) {
-            jump(*each_monkey, gateway_number, fog_device_number);
+            jump(*each_monkey, gate_way_number, fog_device_number);
         }
         for (int jump_number = 0; jump_number < max_number; ++jump_number) {
-            jump(*each_monkey, gateway_number + fog_device_number, edge_device_number);
+            jump(*each_monkey, gate_way_number + fog_device_number, edge_device_number);
         }
     }
 }
