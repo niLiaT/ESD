@@ -3,83 +3,80 @@
 using namespace std;
 
 int gateway_number;
-int fog_server_number;
-int edge_server_number;
+int fog_device_number;
+int edge_device_number;
+int agv_number;
 
-void connect() {
-    gateway_number = 40;
-    fog_server_number = 40;
-    edge_server_number = 40;
+vector<Gate_way> gate_ways;
+vector<Fog_device> fog_devices;
+vector<Edge_device> edge_devices;
+vector<Agv> agvs;
+
+Gate_way::Gate_way() {
+    x = 0;
+    y = 0;
 }
 
-// void input() {
-//     std::ifstream infile("dataset/taichung.txt");
+Fog_device::Fog_device() {
+    x = 0;
+    y = 0;
+}
 
-//     double longitude, latitude;
-//     int counter = 0;
+Edge_device::Edge_device() {
+    x = 0;
+    y = 0;
+}
 
-//     while(infile >> longitude >> latitude) {
-//         servers[counter].longitude = longitude;
-//         servers[counter].latitude = latitude;
-//         counter++;
-//     }
+Agv::Agv() {
+    x = 0;
+    y = 0;
+}
 
-//     counter = 0;
+void input() {
+    std::ifstream infile("dataset/3_15_70_500.txt");
 
-//     infile.close();
-//     infile.clear();
+    double x, y;
+    int counter = 0;
+    gate_ways.resize(gateway_number);
+    fog_devices.resize(fog_device_number);
+    edge_devices.resize(edge_device_number);
+    agvs.resize(agv_number);
 
-//     infile.open("dataset/population_taichung.txt");
-//     while(infile >> longitude >> latitude) {
-//         clients[counter].longitude = longitude;
-//         clients[counter].latitude = latitude;
-//         counter++;
-//     }
-// }
+    while(infile >> x >> y) {
+        if (counter < gateway_number) {
+            gate_ways[counter].x = x;
+            gate_ways[counter].y = y;
+        }
+        else if ((counter - gateway_number) < fog_device_number) {
+            fog_devices[counter - gateway_number].x = x;
+            fog_devices[counter - gateway_number].y = y;
+        }
+        else if ((counter - gateway_number - fog_device_number) < edge_device_number) {
+            edge_devices[counter - gateway_number - fog_device_number].x = x;
+            edge_devices[counter - gateway_number - fog_device_number].y = y;
+        }
+        else {
+            agvs[counter - gateway_number - fog_device_number - edge_device_number].x = x;
+            agvs[counter - gateway_number - fog_device_number - edge_device_number].y = y;
+        }
+        counter++;
+    }
 
-// Server::Server() {
-//     longitude = 0.0;
-//     latitude = 0.0;
-// }
+    infile.close();
+    infile.clear();
+}
 
-// Client::Client() {
-//     longitude = 0.0;
-//     latitude = 0.0;
-// }
+void build() {
+    gateway_number = 3;
+    fog_device_number = 15;
+    edge_device_number = 70;
+    agv_number = 500;
+    
+    input();
+}
 
-// void initialize(int server_quantity, int client_quantity) {
-//     servers.resize(server_quantity);
-//     clients.resize(client_quantity);
-
-//     input();
-
-//     distance_table.resize(server_quantity, vector<long double>(client_quantity));
-
-//     for (int each_server = 0; each_server < server_quantity; ++each_server) {
-//         for (int each_client = 0; each_client < client_quantity; ++each_client) {
-//             distance_table[each_server][each_client] = \
-//             distance(servers[each_server].latitude, servers[each_server].longitude, clients[each_client].latitude, clients[each_client].longitude);
-//         }
-//     }
-
-// }
-
-// void connection(vector<bool> solution) {
-     
-
-// }
-
-// int main() {
-//     initialize(320, 1500);
-
-//     srand(time(NULL));
-
-//     vector<bool> sol(320, 0);
-
-//     for (int i = 0; i < 320; i++) {
-//         sol[i] = rand() % 2;
-//     }
-
-//     connection(sol);
-
-// }
+void connect(vector<bool> solution) {
+    for (vector<Agv>::iterator each_agv = agvs.begin(); each_agv != agvs.end(); ++each_agv) {
+        
+    }
+}

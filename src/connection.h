@@ -10,30 +10,50 @@
 using namespace std;
 
 extern int gateway_number;
-extern int fog_server_number;
-extern int edge_server_number;
+extern int fog_device_number;
+extern int edge_device_number;
+extern int agv_number;
 
-void connect();
+class Gate_way {
+    public:
+        Gate_way();
 
-// class Server {
-//     public:
-//         Server();
+        int x;
+        int y;
+};
 
-//         double longitude;
-//         double latitude;
-// };
+class Fog_device {
+    public:
+        Fog_device();
 
-// class Client {
-//     public:
-//         Client();
+        int x;
+        int y;
+};
 
-//         double longitude;
-//         double latitude;
-//         vector<int> priority;
-// };
+class Edge_device {
+    public:
+        Edge_device();
+        
+        int x;
+        int y;
+};
 
-// vector<Server> servers;
-// vector<Client> clients;
+class Agv {
+    public:
+        Agv();
+
+        int x;
+        int y;
+};
+
+extern vector<Gate_way> gate_ways;
+extern vector<Fog_device> fog_devices;
+extern vector<Edge_device> edge_devices;
+extern vector<Agv> agvs;
 // vector<vector<long double> > distance_table;
+
+void input();
+void build();
+void connect(vector<bool>);
 
 #endif

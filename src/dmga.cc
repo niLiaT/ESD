@@ -6,7 +6,7 @@
 #define parents_number 2
 #define mutation_rate 0.3
 
-template <typename T> int sgn (T val);
+// template <typename T> int sgn (T val);
 template <typename T> vector<T> read_vector_range(vector<T> vec, int start_index, int count);
 template <typename T> void write_vector_range(vector<T> &target_vec, vector<T> source_vec, int start_index);
 
@@ -15,7 +15,7 @@ int evaluation_times = 0;
 void dmga(const int iterations, int dimension, int population) {
     float best_fitness = 0;
     vector<Monkey> monkeys(population, Monkey(dimension));
-
+    
     initialization(monkeys);
 
     while (evaluation_times < iterations) {
@@ -29,14 +29,12 @@ void dmga(const int iterations, int dimension, int population) {
 
         somersault(monkeys);
 
-        for (vector<Monkey>::iterator each_monkey = monkeys.begin(); each_monkey != monkeys.end(); ++each_monkey) {
-            for (vector<bool>::iterator each_bit = each_monkey->position.begin(); each_bit != each_monkey->position.end(); ++each_bit) {
-                cout << *each_bit << " ";
-            }
-            cout << endl;
-        }
-
-        // cout << iteration / population << "," << best_fitness << endl;
+        // for (vector<Monkey>::iterator each_monkey = monkeys.begin(); each_monkey != monkeys.end(); ++each_monkey) {
+        //     for (vector<bool>::iterator each_bit = each_monkey->position.begin(); each_bit != each_monkey->position.end(); ++each_bit) {
+        //         cout << *each_bit << " ";
+        //     }
+        //     cout << endl;
+        // }
     }
 }
 
@@ -46,7 +44,8 @@ Monkey::Monkey(int dimension) {
 
 void initialization(vector<Monkey> &monkeys) {
     //Random generate the solution of each monkey
-    connect();
+    build();
+
     for (vector<Monkey>::iterator each_monkey = monkeys.begin(); each_monkey != monkeys.end(); ++each_monkey) {
         for (vector<bool>::iterator each_bit = each_monkey->position.begin(); each_bit != each_monkey->position.end(); ++each_bit) {
             *each_bit = rand() % 2;
@@ -135,10 +134,10 @@ void watch_jump(vector<Monkey> &monkeys) {
             jump(*each_monkey, 0, gateway_number);
         }
         for (int jump_number = 0; jump_number < max_number; ++jump_number) {
-            jump(*each_monkey, gateway_number, fog_server_number);
+            jump(*each_monkey, gateway_number, fog_device_number);
         }
         for (int jump_number = 0; jump_number < max_number; ++jump_number) {
-            jump(*each_monkey, gateway_number + fog_server_number, edge_server_number);
+            jump(*each_monkey, gateway_number + fog_device_number, edge_device_number);
         }
     }
 }
