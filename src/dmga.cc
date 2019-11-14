@@ -12,7 +12,6 @@ template <typename T> void write_vector_range(vector<T> &target_vec, vector<T> s
 int evaluation_times = 0;
 
 void dmga(const int iterations, int dimension, int population) {
-    float best_fitness = 0;
     vector<Monkey> monkeys(population, Monkey(dimension));
     
     initialization(monkeys);
@@ -29,21 +28,7 @@ void dmga(const int iterations, int dimension, int population) {
 
         somersault(monkeys);
 
-        // for (vector<Monkey>::iterator each_monkey = monkeys.begin(); each_monkey != monkeys.end(); ++each_monkey) {
-        //     for (vector<bool>::iterator each_bit = each_monkey->position.begin(); each_bit != each_monkey->position.end(); ++each_bit) {
-        //         cout << *each_bit << " ";
-        //     }
-        //     cout << endl;
-        // }
-
-        for (vector<bool>::iterator each_bit = monkeys[0].position.begin(); each_bit != monkeys[0].position.end(); ++each_bit) {
-            cout << *each_bit << " ";
-        }
-        cout << endl;
-
-        // for (vector<Monkey>::iterator each_monkey = monkeys.begin(); each_monkey != monkeys.end(); ++each_monkey) {
-        //     cout << (*each_monkey).fitness << endl;
-        // }
+        cout << best_monkey(monkeys) << endl;
     }
 }
 
@@ -282,4 +267,14 @@ template <typename T> void write_vector_range(vector<T> &target_vec, vector<T> s
     for (int index = 0; index < min(target_vec.size(), source_vec.size()); ++index) {
         target_vec[index + start_index] = source_vec[index];
     }
+}
+
+double best_monkey(vector<Monkey> &monkeys) {
+    double optimal = DBL_MAX;
+    for (vector<Monkey>::iterator each_monkey = monkeys.begin(); each_monkey != monkeys.end(); ++each_monkey) {
+        if (each_monkey->fitness < optimal)
+            optimal = each_monkey->fitness;
+    }
+
+    return optimal;
 }

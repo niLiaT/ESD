@@ -22,5 +22,6 @@ void watch_jump(vector<Monkey> &monkeys);
 void cooperation(vector<Monkey> &monkeys);
 void crossover_mutation(vector<Monkey> &monkeys);
 void somersault(vector<Monkey> &monkeys);
+double best_monkey(vector<Monkey> &monkeys);
 
 #endif

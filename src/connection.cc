@@ -130,12 +130,18 @@ void connect(vector<bool> device_status) {
     void *upper_layer;
 
     for (vector<bool>::iterator each_bit = device_status.begin(); each_bit != device_status.end(); ++each_bit) {
-        if (counter < gate_way_number)
+        if (counter < gate_way_number) {
             gate_ways[counter].status = *each_bit;
-        else if ((counter - gate_way_number) < fog_device_number)
-            fog_devices[counter].status = *each_bit;
-        else
-            edge_devices[counter].status = *each_bit;
+            counter++;
+        }
+        else if ((counter - gate_way_number) < fog_device_number) {
+            fog_devices[counter - gate_way_number].status = *each_bit;
+            counter++;
+        }
+        else {
+            edge_devices[counter - gate_way_number - fog_device_number].status = *each_bit;
+            counter++;
+        }
     }
 
     for (vector<Agv>::iterator each_agv = agvs.begin(); each_agv != agvs.end(); ++each_agv) {
@@ -275,7 +281,7 @@ struct penalty_cost penalty_evaluation() {
 double cost_evaluation(vector<bool> solution) {
     struct penalty_cost extra_cost;
     double cost;
-    int counter;
+    // int counter;
     int fiber_length = 0;
     int edge_quantity = 0;
     int fog_quantity = 0;
