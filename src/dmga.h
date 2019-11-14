@@ -12,7 +12,7 @@ class Monkey {
         Monkey(int);
     
         vector<bool> position;
-        int fitness;
+        double fitness;
 };
 
 void dmga(const int evaluationTimes, int dimension, int population);

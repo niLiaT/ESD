@@ -1,6 +1,5 @@
 #include "dmga.h"
 #include "connection.h"
-#include "fitness.h"
 
 #define max_number 10
 #define parents_number 2
@@ -19,6 +18,7 @@ void dmga(const int iterations, int dimension, int population) {
     initialization(monkeys);
 
     while (evaluation_times < iterations) {
+
         climb(monkeys);
 
         watch_jump(monkeys);
@@ -35,6 +35,15 @@ void dmga(const int iterations, int dimension, int population) {
         //     }
         //     cout << endl;
         // }
+
+        for (vector<bool>::iterator each_bit = monkeys[0].position.begin(); each_bit != monkeys[0].position.end(); ++each_bit) {
+            cout << *each_bit << " ";
+        }
+        cout << endl;
+
+        // for (vector<Monkey>::iterator each_monkey = monkeys.begin(); each_monkey != monkeys.end(); ++each_monkey) {
+        //     cout << (*each_monkey).fitness << endl;
+        // }
     }
 }
 
@@ -50,7 +59,7 @@ void initialization(vector<Monkey> &monkeys) {
         for (vector<bool>::iterator each_bit = each_monkey->position.begin(); each_bit != each_monkey->position.end(); ++each_bit) {
             *each_bit = rand() % 2;
         }
-        each_monkey->fitness = one_max(each_monkey->position);
+        each_monkey->fitness = cost_evaluation(each_monkey->position);
     }
 }
 
@@ -79,7 +88,7 @@ vector<bool> small_step(vector<bool> solution) {
 }
 
 void climb(vector<Monkey> &monkeys) {
-    int new_fitness;
+    double new_fitness;
     vector<bool> temp_position;
 
     for (vector<Monkey>::iterator each_monkey = monkeys.begin(); each_monkey != monkeys.end(); ++each_monkey) {
@@ -88,9 +97,9 @@ void climb(vector<Monkey> &monkeys) {
             for (int each_bit = 0; each_bit < temp_position.size(); ++each_bit) {
                 temp_position[each_bit] = temp_position[each_bit] + each_monkey->position[each_bit];
             }
-            new_fitness = one_max(temp_position);
+            new_fitness = cost_evaluation(temp_position);
             evaluation_times++;
-            if (new_fitness > each_monkey->fitness) {
+            if (new_fitness < each_monkey->fitness) {
                 each_monkey->position = temp_position;
                 each_monkey->fitness = new_fitness;
             }
@@ -100,9 +109,9 @@ void climb(vector<Monkey> &monkeys) {
             for (int each_bit = 0; each_bit < temp_position.size(); ++each_bit) {
                 temp_position[each_bit] = temp_position[each_bit] + each_monkey->position[each_bit];
             }
-            new_fitness = one_max(temp_position);
+            new_fitness = cost_evaluation(temp_position);
             evaluation_times++;
-            if (new_fitness > each_monkey->fitness) {
+            if (new_fitness < each_monkey->fitness) {
                 each_monkey->position = temp_position;
                 each_monkey->fitness = new_fitness;
             }
@@ -112,16 +121,16 @@ void climb(vector<Monkey> &monkeys) {
 
 void jump(Monkey &monkey, int start_bit, int device_number) {
     vector<bool> temp, candidate;
-    int new_fitness;
+    double new_fitness;
     start_bit = 0;
     candidate.assign(monkey.position.begin(), monkey.position.end());
     temp.resize(device_number);
     write_vector_range(temp, monkey.position, start_bit);
     temp = large_step(temp);
     write_vector_range(candidate, temp, start_bit);
-    new_fitness = one_max(candidate);
+    new_fitness = cost_evaluation(candidate);
     evaluation_times++;
-    if (new_fitness > monkey.fitness) {
+    if (new_fitness < monkey.fitness) {
         monkey.position.assign(candidate.begin(), candidate.end());
         monkey.fitness = new_fitness;
     }
@@ -146,10 +155,10 @@ void cooperation(vector<Monkey> &monkeys) {
     vector<bool> temp;
     vector<bool> best_position;
     vector<Monkey>::iterator best_monkey;
-    int best_fitness = 0, temp_fitness = 0;
+    double best_fitness = DBL_MAX, temp_fitness = 0;
 
     for (vector<Monkey>::iterator each_monkey = monkeys.begin(); each_monkey != monkeys.end(); ++each_monkey) {
-        if (each_monkey->fitness > best_fitness) {
+        if (each_monkey->fitness < best_fitness) {
             best_fitness = each_monkey->fitness;
             best_monkey = each_monkey;
         }
@@ -166,9 +175,9 @@ void cooperation(vector<Monkey> &monkeys) {
                 }
                 temp[each_bit] = temp[each_bit] + each_monkey->position[each_bit];
             }
-            temp_fitness = one_max(temp);
+            temp_fitness = cost_evaluation(temp);
             evaluation_times++;
-            if (temp_fitness > each_monkey->fitness) {
+            if (temp_fitness < each_monkey->fitness) {
                 each_monkey->fitness = temp_fitness;
                 each_monkey->position = temp;
             }
@@ -180,7 +189,7 @@ void crossover_mutation(vector<Monkey> &monkeys) {
     int random_bit;
     int random_monkey1;
     int random_monkey2;
-    int temp_fitness;
+    // double temp_fitness;
     vector<Monkey> candidate = monkeys;
 
     for (int crossover_number = 0; crossover_number < parents_number; ++crossover_number) {
@@ -196,11 +205,11 @@ void crossover_mutation(vector<Monkey> &monkeys) {
             random_bit = rand() % each_candidate->position.size();
             each_candidate->position[random_bit] = !each_candidate->position[random_bit];
         }
-        each_candidate->fitness = one_max(each_candidate->position);
+        each_candidate->fitness = cost_evaluation(each_candidate->position);
         evaluation_times++;
     }
     for (int each_monkey = 0; each_monkey < candidate.size(); ++each_monkey) {
-        if (candidate[each_monkey].fitness > monkeys[each_monkey].fitness) {
+        if (candidate[each_monkey].fitness < monkeys[each_monkey].fitness) {
             monkeys[each_monkey].position = candidate[each_monkey].position;
             monkeys[each_monkey].fitness = candidate[each_monkey].fitness;
         }
@@ -211,7 +220,8 @@ void somersault(vector<Monkey> &monkeys) {
     vector<float> accumulator(monkeys[0].position.size(), 0.0);
     vector<bool> pivot(accumulator.size(), false);
     vector<bool> temp(accumulator.size(), false);
-    int new_fitness, random_monkey;
+    double new_fitness;
+    int random_monkey;
     bool same_flag = true;
 
     for (vector<Monkey>::iterator each_monkey = monkeys.begin(); each_monkey != monkeys.end(); ++each_monkey) {
@@ -233,9 +243,9 @@ void somersault(vector<Monkey> &monkeys) {
                 }
             }
 
-            new_fitness = one_max(each_monkey->position);
+            new_fitness = cost_evaluation(each_monkey->position);
             evaluation_times++;
-            if (new_fitness > each_monkey->fitness) {
+            if (new_fitness < each_monkey->fitness) {
                 each_monkey->fitness = new_fitness;
                 each_monkey->position = temp;
             }

@@ -22,6 +22,13 @@ class Gate_way {
         int x;
         int y;
         bool status;
+        int link_quantity;
+        int demand;
+
+        void reset() {
+            link_quantity = 0;
+            demand = 0;
+        }
 };
 
 class Fog_device {
@@ -32,6 +39,15 @@ class Fog_device {
         int y;
         bool status;
         Gate_way *link;
+        int link_quantity;
+        int demand;
+        double distance;
+
+        void reset() {
+            link_quantity = 0;
+            link = NULL;
+            demand = 0;
+        }
 };
 
 class Edge_device {
@@ -42,6 +58,15 @@ class Edge_device {
         int y;
         bool status;
         Fog_device *link;
+        int link_quantity;
+        int demand;
+        double distance;
+
+        void reset() {
+            link_quantity = 0;
+            link = NULL;
+            demand = 0;
+        }
 };
 
 class Agv {
@@ -50,7 +75,13 @@ class Agv {
 
         int x;
         int y;
+        int demand;
         Edge_device *link;
+        double distance;
+
+        void reset() {
+            link = NULL;
+        }
 };
 
 extern vector<Gate_way> gate_ways;
@@ -62,5 +93,6 @@ extern vector<Agv> agvs;
 void input();
 void build();
 void connect(vector<bool>);
+double cost_evaluation(vector<bool>);
 
 #endif
