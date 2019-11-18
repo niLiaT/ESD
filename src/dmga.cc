@@ -13,6 +13,7 @@ int evaluation_times = 0;
 
 void dmga(const int iterations, int dimension, int population) {
     vector<Monkey> monkeys(population, Monkey(dimension));
+    int counter = 0;
     
     initialization(monkeys);
 
@@ -28,7 +29,9 @@ void dmga(const int iterations, int dimension, int population) {
 
         somersault(monkeys);
 
-        cout << best_monkey(monkeys) << endl;
+        cout << counter << "," << best_monkey(monkeys) << endl;
+
+        counter++;
     }
 }
 
