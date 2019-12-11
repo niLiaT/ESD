@@ -10,6 +10,7 @@ vector<Bat>::iterator best_bat;
 
 void bat(const int iterations, int dimension, int population) {
     vector<Bat> bats(population, Bat(dimension));
+    // int counter = 0;
 
 
     initialization(bats);
@@ -18,7 +19,9 @@ void bat(const int iterations, int dimension, int population) {
     while (evaluation_times < iterations) {
         echolocation(bats);
         best_bat = get_best_bats(bats);
-        cout << best_bat->fitness << endl;
+        // cout << counter << " " << best_bat->fitness << endl;
+        // counter++;
+        cout << evaluation_times << "," << best_bat->fitness << endl;
     }
 }
 
@@ -127,12 +130,11 @@ void Bat::locate() {
 
     candidate_fitness = DBL_MAX;
 
-    if (&(*best_bat) != this)    
+    if (&(*best_bat) != this)
         velocity = rand() % hamming_distance(position, best_bat->position);
 
     else
         velocity = 0;
-    
     // velocity = uniform(generator) + 1;
 
     if (velocity < position.size() / 2) {
@@ -141,7 +143,6 @@ void Bat::locate() {
             if ((temp_fitness = cost_evaluation(temp_position)) < candidate_fitness) {
                 candidate_fitness = temp_fitness;
                 candidate_position = temp_position;
-                evaluation_times++;
             }
         }
     }
@@ -151,10 +152,11 @@ void Bat::locate() {
             if ((temp_fitness = cost_evaluation(temp_position)) < candidate_fitness) {
                 candidate_fitness = temp_fitness;
                 candidate_position = temp_position;
-                evaluation_times++;
             }
         }
     }
+    
+    evaluation_times++;
 
     if (rand() / RAND_MAX > pulse_rate) {
         two_opt(temp_position, temp_position);
@@ -188,5 +190,5 @@ int main() {
     srand(time(NULL));
 
     input();
-    bat(2000000, 51, 50);
+    bat(250000, 51, 50);
 }
