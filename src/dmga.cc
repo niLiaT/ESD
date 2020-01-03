@@ -11,8 +11,8 @@ template <typename T> void write_vector_range(vector<T> &target_vec, vector<T> s
 
 int evaluation_times = 0;
 
-void dmga(const int iterations, int dimension, int population) {
-    vector<Monkey> monkeys(population, Monkey(dimension));
+void dmga(const int iterations, int dimension, int monkey_quantity) {
+    vector<Monkey> monkeys(monkey_quantity, Monkey(dimension));
     int counter = 0;
     
     initialization(monkeys);
