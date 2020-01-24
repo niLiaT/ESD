@@ -11,27 +11,27 @@
 using namespace std;
 
 class Bat {
-    public:
-        Bat(int);
+public:
+    Bat(int);
 
-        vector<bool> position; //X
+    vector<bool> position; //X
 
-        double fitness;
-        float max_frequency, min_frequency;
+    double fitness;
+    float max_frequency, min_frequency;
 
-        void initialization();
-        void locate();
-        void movement(Bat);
-        void local_search();
-    
-    private:
-        vector<double> velocity; //v
-        vector<bool> candidate;
-        vector<double> distribution; //x
-        double candidate_fitness;
-        double frequency; //f
-        double loudness; //L
-        double pulse_rate; //r
+    void initialization();
+    void locate();
+    void movement(Bat);
+    void local_search();
+
+private:
+    vector<double> velocity; //v
+    vector<bool> candidate;
+    vector<double> distribution; //x
+    double candidate_fitness;
+    double frequency; //f
+    double loudness; //L
+    double pulse_rate; //r
 };
 
 // extern vector<Bat>::iterator best_bat;

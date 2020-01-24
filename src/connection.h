@@ -16,72 +16,72 @@ extern int edge_device_number;
 extern int agv_number;
 
 class Gate_way {
-    public:
-        Gate_way();
+public:
+    Gate_way();
 
-        int x;
-        int y;
-        bool status;
-        int link_quantity;
-        int demand;
+    int x;
+    int y;
+    bool status;
+    int link_quantity;
+    int demand;
 
-        void reset() {
-            link_quantity = 0;
-            demand = 0;
-        }
+    void reset() {
+        link_quantity = 0;
+        demand = 0;
+    }
 };
 
 class Fog_device {
-    public:
-        Fog_device();
+public:
+    Fog_device();
 
-        int x;
-        int y;
-        bool status;
-        Gate_way *link;
-        int link_quantity;
-        int demand;
-        double distance;
+    int x;
+    int y;
+    bool status;
+    Gate_way *link;
+    int link_quantity;
+    int demand;
+    double distance;
 
-        void reset() {
-            link_quantity = 0;
-            link = NULL;
-            demand = 0;
-        }
+    void reset() {
+        link_quantity = 0;
+        link = NULL;
+        demand = 0;
+    }
 };
 
 class Edge_device {
-    public:
-        Edge_device();
-        
-        int x;
-        int y;
-        bool status;
-        Fog_device *link;
-        int link_quantity;
-        int demand;
-        double distance;
+public:
+    Edge_device();
+    
+    int x;
+    int y;
+    bool status;
+    Fog_device *link;
+    int link_quantity;
+    int demand;
+    double distance;
 
-        void reset() {
-            link_quantity = 0;
-            link = NULL;
-            demand = 0;
-        }
+    void reset() {
+        link_quantity = 0;
+        link = NULL;
+        demand = 0;
+    }
 };
 
 class Agv {
-    public:
-        Agv();
+public:
+    Agv();
 
-        int x;
-        int y;
-        int demand;
-        Edge_device *link;
-        double distance;
+    int x;
+    int y;
+    int demand;
+    Edge_device *link;
+    double distance;
 
-        void reset() {
-            link = NULL;
-        }
+    void reset() {
+        link = NULL;
+    }
 };
 
 extern vector<Gate_way> gate_ways;

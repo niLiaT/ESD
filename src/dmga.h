@@ -8,11 +8,11 @@
 using namespace std;
 
 class Monkey {
-    public:
-        Monkey(int);
-    
-        vector<bool> position;
-        double fitness;
+public:
+    Monkey(int);
+
+    vector<bool> position;
+    double fitness;
 };
 
 void dmga(const int evaluationTimes, int dimension, int population);
