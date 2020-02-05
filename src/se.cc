@@ -108,8 +108,15 @@ void vision_search(vector<Region> &regions, int player_quantity) {
                     defending_champion = challenger;
                 }
             }
-            // defending_champion->searchers.push_back(*each_searcher);
-            each_region->searchers.erase(each_searcher); //*****bug*****
+
+            
+            // if (each_region->searchers.size() > 0) {
+            //     defending_champion->searchers.push_back(*each_searcher);
+            //     each_region->searchers.erase(each_searcher);
+            // }
+            // else {
+            //     break;
+            // }
         }
     }
 }
@@ -129,7 +136,7 @@ Good marketing_research(vector<Region> &regions) {
                 }
             }
 
-            if (each_candidate->price < worst_good->price) {
+            if (each_candidate->price > worst_good->price) {
                 *worst_good = *each_candidate;
             }
         }
@@ -191,8 +198,9 @@ Good Searcher::invest(Good good) {
     good.utility[random_index] = ~good.utility[random_index];
 
     //Update investment
+    good.price = calc_fitness(good.utility);
     this->candidate_profit = calc_fitness(this->candidate_investment);
-    if (this->candidate_profit < this->profit) {
+    if (this->candidate_profit > this->profit) {
         this->profit = this->candidate_profit;
         this->investment = this->candidate_investment;
     }
