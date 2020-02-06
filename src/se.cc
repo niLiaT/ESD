@@ -100,7 +100,7 @@ void vision_search(vector<Region> &regions, int player_quantity) {
 
     //Determination by tournament
     for (vector<Region>::iterator each_region = regions.begin(); each_region != regions.end(); ++each_region) {
-        for (vector<Searcher>::iterator each_searcher = each_region->searchers.begin(); each_searcher != each_region->searchers.end(); ++each_searcher) {
+        for (vector<Searcher>::iterator each_searcher = each_region->searchers.begin(); each_searcher != each_region->searchers.end();) {
             defending_champion = regions.begin() + (rand() % regions.size());
             for (int round = 0; round < player_quantity - 1; ++round) {
                 challenger = regions.begin() + (rand() % regions.size());
@@ -109,14 +109,11 @@ void vision_search(vector<Region> &regions, int player_quantity) {
                 }
             }
 
-            
-            // if (each_region->searchers.size() > 0) {
-            //     defending_champion->searchers.push_back(*each_searcher);
-            //     each_region->searchers.erase(each_searcher);
-            // }
-            // else {
-            //     break;
-            // }
+            defending_champion->searchers.push_back(*each_searcher);
+
+            if (each_region->searchers.size() > 0) {
+                each_region->searchers.erase(each_searcher);            
+            }
         }
     }
 }
@@ -124,7 +121,7 @@ void vision_search(vector<Region> &regions, int player_quantity) {
 Good marketing_research(vector<Region> &regions) {
     vector<Good>::iterator worst_good;
     Good optimal = Good(0);
-    optimal.price = DBL_MAX;
+    optimal.price = 0;
 
     for (vector<Region>::iterator each_region = regions.begin(); each_region != regions.end(); ++each_region) {
         //Update the candidate good of each region
@@ -143,13 +140,13 @@ Good marketing_research(vector<Region> &regions) {
 
         //Find the best good of a region
         for (vector<Good>::iterator each_good = each_region->goods.begin(); each_good != each_region->goods.end(); ++each_good) {
-            if (each_good->price < each_region->best_good.price) {
+            if (each_good->price > each_region->best_good.price) {
                 each_region->best_good = *each_good;
             }
         }
 
         //Find the best good of the market
-        if (each_region->best_good.price < optimal.price) {
+        if (each_region->best_good.price > optimal.price) {
             optimal = each_region->best_good;
         }
 
