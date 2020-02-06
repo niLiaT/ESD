@@ -31,6 +31,7 @@ public:
     int invested_times; //t_a
     int univested_times; //t_b
     vector<Searcher> searchers; //Searchers who invest in the region
+    vector<Searcher> candidate_searchers; //Temporary searchers of the region
     vector<Good> goods; //Goods of the region
     vector<Good> candidate_goods; //Temporary goods of the region
     vector<bool> id_bits; //Identity bits
