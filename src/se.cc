@@ -170,7 +170,7 @@ Searcher::Searcher(int dimension) {
     for (vector<bool>::iterator each_dimension = (this->investment).begin(); each_dimension != (this->investment).end(); ++each_dimension) {
         *each_dimension = rand() % 2;
     }
-    this->profit = calc_fitness(this->investment);
+    this->profit = cost_evaluation(this->investment);
 };
 
 Good Searcher::invest(Good good) {
@@ -195,8 +195,8 @@ Good Searcher::invest(Good good) {
     good.utility[random_index] = ~good.utility[random_index];
 
     //Update investment
-    good.price = calc_fitness(good.utility);
-    this->candidate_profit = calc_fitness(this->candidate_investment);
+    good.price = cost_evaluation(good.utility);
+    this->candidate_profit = cost_evaluation(this->candidate_investment);
     if (this->candidate_profit > this->profit) {
         this->profit = this->candidate_profit;
         this->investment = this->candidate_investment;
@@ -211,7 +211,7 @@ Good::Good(int dimension) {
     for (vector<bool>::iterator each_dimension = (this->utility).begin(); each_dimension != (this->utility).end(); ++each_dimension) {
         *each_dimension = rand() % 2;
     }
-    this->price = calc_fitness(this->utility);
+    this->price = cost_evaluation(this->utility);
 };
 
 Region::Region(int searcher_quantity, int goods_quantity, int dimension) {

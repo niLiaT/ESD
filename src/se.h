@@ -4,7 +4,6 @@
 #include <iostream>
 #include <vector>
 #include "connection.h"
-#include "fitness.h"
 #include <algorithm>
 
 using namespace std;
