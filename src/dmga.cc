@@ -1,5 +1,4 @@
 #include "dmga.h"
-#include "connection.h"
 
 #define max_number 10
 #define parents_number 2
@@ -41,7 +40,7 @@ Monkey::Monkey(int dimension) {
 
 void initialization(vector<Monkey> &monkeys) {
     //Random generate the solution of each monkey
-    build();
+    // build();
 
     for (vector<Monkey>::iterator each_monkey = monkeys.begin(); each_monkey != monkeys.end(); ++each_monkey) {
         for (vector<bool>::iterator each_bit = each_monkey->position.begin(); each_bit != each_monkey->position.end(); ++each_bit) {
