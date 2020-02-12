@@ -23,8 +23,6 @@ void se(int max_evaluate_times, int dimension, int region_quantity, int searcher
 }
 
 vector<Region> initialization(int region_quantity, int searcher_quantity, int good_quantity, int dimension) {
-    // build();
-
     vector<Region> sub_markets(region_quantity, Region(searcher_quantity, good_quantity, dimension));
 
     for (vector<Region>::iterator each_submarket = sub_markets.begin(); each_submarket != sub_markets.end(); ++each_submarket) {

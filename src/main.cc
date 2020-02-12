@@ -19,7 +19,7 @@ int main(int argc, char *argv[]) {
     int goods = atoi(argv[6]);
     int players = atoi(argv[7]);
 
-    build(dataset);
+    input(dataset);
 
     // dmga(iterations, solution_length, population);
     // bat(iterations, solution_length, population);

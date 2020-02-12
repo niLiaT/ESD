@@ -80,6 +80,9 @@ void input(char *dataset) {
 
     double x, y;
     int counter = 0;
+    
+    infile >> gate_way_number >> fog_device_number >> edge_device_number >> agv_number;
+
     gate_ways.resize(gate_way_number);
     fog_devices.resize(fog_device_number);
     edge_devices.resize(edge_device_number);
@@ -107,15 +110,6 @@ void input(char *dataset) {
 
     infile.close();
     infile.clear();
-}
-
-void build(char *dataset) {
-    gate_way_number = 30;
-    fog_device_number = 150;
-    edge_device_number = 700;
-    agv_number = 5000;
-    
-    input(dataset);
 }
 
 inline double distance(int x1, int y1, int x2, int y2) {

@@ -88,10 +88,8 @@ extern vector<Gate_way> gate_ways;
 extern vector<Fog_device> fog_devices;
 extern vector<Edge_device> edge_devices;
 extern vector<Agv> agvs;
-// vector<vector<long double> > distance_table;
 
 void input(char *);
-void build(char *);
 void connect(vector<bool>);
 double cost_evaluation(vector<bool>);
 
