@@ -8,7 +8,7 @@
 template <typename T> vector<T> read_vector_range(vector<T> vec, int start_index, int count);
 template <typename T> void write_vector_range(vector<T> &target_vec, vector<T> source_vec, int start_index);
 
-int evaluation_times = 0;
+int evaluate_times = 0;
 
 void dmga(const int iterations, int dimension, int monkey_quantity) {
     vector<Monkey> monkeys(monkey_quantity, Monkey(dimension));
@@ -16,7 +16,7 @@ void dmga(const int iterations, int dimension, int monkey_quantity) {
     
     initialization(monkeys);
 
-    while (evaluation_times < iterations) {
+    while (evaluate_times < iterations) {
 
         climb(monkeys);
 
@@ -28,9 +28,7 @@ void dmga(const int iterations, int dimension, int monkey_quantity) {
 
         somersault(monkeys);
 
-        cout << counter << "," << best_monkey(monkeys) << endl;
-
-        counter++;
+        cout << evaluate_times << "," << best_monkey(monkeys) << endl;
     }
 }
 
@@ -85,7 +83,7 @@ void climb(vector<Monkey> &monkeys) {
                 temp_position[each_bit] = temp_position[each_bit] + each_monkey->position[each_bit];
             }
             new_fitness = cost_evaluation(temp_position);
-            evaluation_times++;
+            evaluate_times++;
             if (new_fitness < each_monkey->fitness) {
                 each_monkey->position = temp_position;
                 each_monkey->fitness = new_fitness;
@@ -97,7 +95,7 @@ void climb(vector<Monkey> &monkeys) {
                 temp_position[each_bit] = temp_position[each_bit] + each_monkey->position[each_bit];
             }
             new_fitness = cost_evaluation(temp_position);
-            evaluation_times++;
+            evaluate_times++;
             if (new_fitness < each_monkey->fitness) {
                 each_monkey->position = temp_position;
                 each_monkey->fitness = new_fitness;
@@ -116,7 +114,7 @@ void jump(Monkey &monkey, int start_bit, int device_number) {
     temp = large_step(temp);
     write_vector_range(candidate, temp, start_bit);
     new_fitness = cost_evaluation(candidate);
-    evaluation_times++;
+    evaluate_times++;
     if (new_fitness < monkey.fitness) {
         monkey.position.assign(candidate.begin(), candidate.end());
         monkey.fitness = new_fitness;
@@ -163,7 +161,7 @@ void cooperation(vector<Monkey> &monkeys) {
                 temp[each_bit] = temp[each_bit] + each_monkey->position[each_bit];
             }
             temp_fitness = cost_evaluation(temp);
-            evaluation_times++;
+            evaluate_times++;
             if (temp_fitness < each_monkey->fitness) {
                 each_monkey->fitness = temp_fitness;
                 each_monkey->position = temp;
@@ -193,7 +191,7 @@ void crossover_mutation(vector<Monkey> &monkeys) {
             each_candidate->position[random_bit] = !each_candidate->position[random_bit];
         }
         each_candidate->fitness = cost_evaluation(each_candidate->position);
-        evaluation_times++;
+        evaluate_times++;
     }
     for (int each_monkey = 0; each_monkey < candidate.size(); ++each_monkey) {
         if (candidate[each_monkey].fitness < monkeys[each_monkey].fitness) {
@@ -231,7 +229,7 @@ void somersault(vector<Monkey> &monkeys) {
             }
 
             new_fitness = cost_evaluation(each_monkey->position);
-            evaluation_times++;
+            evaluate_times++;
             if (new_fitness < each_monkey->fitness) {
                 each_monkey->fitness = new_fitness;
                 each_monkey->position = temp;
