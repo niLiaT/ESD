@@ -75,8 +75,8 @@ Agv::Agv() {
     distance  = 0;
 }
 
-void input() {
-    std::ifstream infile("dataset/30_150_700_5000.txt");
+void input(char *dataset) {
+    std::ifstream infile(dataset);
 
     double x, y;
     int counter = 0;
@@ -109,13 +109,13 @@ void input() {
     infile.clear();
 }
 
-void build() {
+void build(char *dataset) {
     gate_way_number = 30;
     fog_device_number = 150;
     edge_device_number = 700;
     agv_number = 5000;
     
-    input();
+    input(dataset);
 }
 
 inline double distance(int x1, int y1, int x2, int y2) {
