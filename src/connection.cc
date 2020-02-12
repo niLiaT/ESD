@@ -76,7 +76,7 @@ Agv::Agv() {
 }
 
 void input() {
-    std::ifstream infile("dataset/3_15_70_500.txt");
+    std::ifstream infile("dataset/30_150_700_5000.txt");
 
     double x, y;
     int counter = 0;
@@ -110,10 +110,10 @@ void input() {
 }
 
 void build() {
-    gate_way_number = 3;
-    fog_device_number = 15;
-    edge_device_number = 70;
-    agv_number = 500;
+    gate_way_number = 30;
+    fog_device_number = 150;
+    edge_device_number = 700;
+    agv_number = 5000;
     
     input();
 }
