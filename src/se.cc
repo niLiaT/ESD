@@ -2,8 +2,9 @@
 
 vector<bool> decimal_to_binary(int, int);
 
+int evaluate_times = 0;
+
 void se(int max_evaluate_times, int dimension, int region_quantity, int searcher_quantity, int good_quantity, int player_quantity) {
-    int evaluate_times = 0;
     vector<Region> regions; //Regions of a market
     Good optimal_good = Good(0);
 
@@ -15,8 +16,6 @@ void se(int max_evaluate_times, int dimension, int region_quantity, int searcher
         vision_search(regions, player_quantity); //Section II.D in the paper
 
         optimal_good = marketing_research(regions); //Section II.E in the paper
-
-        evaluate_times++;
 
         cout << evaluate_times << "," << optimal_good.price << endl;
     }
@@ -72,6 +71,7 @@ void vision_search(vector<Region> &regions, int player_quantity) {
               The old investment will be replaced if it is worst than the new one, 
               and the new good will be pushed into the candidate list to be determined.*/
             each_region->candidate_goods.push_back(each_searcher->invest(each_region->goods[random_index]));
+            evaluate_times++;
         }
     }
 
