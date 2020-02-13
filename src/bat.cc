@@ -8,21 +8,19 @@ int evaluation_times = 0;
 void bat(const int iterations, int dimension, int bat_quantity) {
     Bat best_bat(dimension);
 
-    build();
-
     vector<Bat> bats(bat_quantity, Bat(dimension));
 
     for (vector<Bat>::iterator each_bat = bats.begin(); each_bat != bats.end(); ++each_bat) {
         each_bat->initialization();
     }
 
-    get_best_bat(bats, best_bat);
+    best_bat = get_best_bat(bats, best_bat);
 
     while (evaluation_times < iterations) {
 
         echolocation(bats, best_bat);
 
-        get_best_bat(bats, best_bat);
+        best_bat = get_best_bat(bats, best_bat);
         
         cout << evaluation_times << "," << best_bat.fitness << endl;
     }
@@ -62,15 +60,15 @@ void echolocation(vector<Bat> &bats, Bat leader) {
 
 void Bat::movement(Bat leader) {
     if ((double)rand() / (RAND_MAX + 1.0) > pulse_rate) {
-        for (int each_bit = 0; each_bit < distribution.size(); ++each_bit) {
-            distribution[each_bit] = position[each_bit] + (2 * ((double)rand() / (RAND_MAX + 1.0)) - 1) * ((double)rand() / (RAND_MAX + 1.0));
-            if ((double)rand() / (RAND_MAX + 1.0) < 1 / (1 + exp(-distribution[each_bit])))
-                candidate[each_bit] = 1;
+        for (int each_bit = 0; each_bit < this->distribution.size(); ++each_bit) {
+            this->distribution[each_bit] = this->position[each_bit] + (2 * ((double)rand() / (RAND_MAX + 1.0)) - 1) * ((double)rand() / (RAND_MAX + 1.0));
+            if ((double)rand() / (RAND_MAX + 1.0) < 1 / (1 + exp(-this->distribution[each_bit])))
+                this->candidate[each_bit] = 1;
             else
-                candidate[each_bit] = 0;
+                this->candidate[each_bit] = 0;
         }
-        for (int each_bit = 0; each_bit < position.size(); ++each_bit) {
-            position[each_bit] = candidate[each_bit];
+        for (int each_bit = 0; each_bit < this->position.size(); ++each_bit) {
+            this->position[each_bit] = this->candidate[each_bit];
         }
     }
 
@@ -78,28 +76,32 @@ void Bat::movement(Bat leader) {
 
     if ((double)rand() / (RAND_MAX + 1.0) < loudness && candidate_fitness < leader.fitness) {
         frequency = min_frequency + (max_frequency - min_frequency) * ((double)rand() / (RAND_MAX + 1.0));
-        for (int each_bit = 0; each_bit < velocity.size(); ++each_bit) {
-            velocity[each_bit] = velocity[each_bit] + (position[each_bit] - leader.position[each_bit]) * frequency;
+        for (int each_bit = 0; each_bit < this->velocity.size(); ++each_bit) {
+            this->velocity[each_bit] = this->velocity[each_bit] + (this->position[each_bit] - leader.position[each_bit]) * frequency;
         }
-        for (int each_bit = 0; each_bit < distribution.size(); ++each_bit) {
-            distribution[each_bit] = velocity[each_bit];
-            if ((double)rand() / (RAND_MAX + 1.0) < (1 / (1 + exp(-distribution[each_bit]))))
-                candidate[each_bit] = 1;
+        for (int each_bit = 0; each_bit < this->distribution.size(); ++each_bit) {
+            this->distribution[each_bit] = this->velocity[each_bit];
+            if ((double)rand() / (RAND_MAX + 1.0) < (1 / (1 + exp(-this->distribution[each_bit]))))
+                this->candidate[each_bit] = 1;
             else
-                candidate[each_bit] = 0;
+                this->candidate[each_bit] = 0;
         }
-        for (int each_bit = 0; each_bit < position.size(); ++each_bit) {
-            position[each_bit] = candidate[each_bit];
+        for (int each_bit = 0; each_bit < this->position.size(); ++each_bit) {
+            this->position[each_bit] = this->candidate[each_bit];
         }
     }
 
     fitness = cost_evaluation(position);
 }
 
-void get_best_bat(vector<Bat> &bats, Bat &best_bat) {
+Bat get_best_bat(vector<Bat> &bats, Bat defender) {
+
+
     for (vector<Bat>::iterator each_bat = bats.begin(); each_bat != bats.end(); ++each_bat) {
-        if (each_bat->fitness < best_bat.fitness) {
-            best_bat = *each_bat;
+        if (each_bat->fitness < defender.fitness) {
+            defender = *each_bat;
         }
     }
+
+    return defender;
 }

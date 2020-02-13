@@ -38,8 +38,6 @@ private:
 
 void bat(int, int, int);
 void echolocation(vector<Bat> &, Bat);
-void get_best_bat(vector<Bat> &, Bat &);
-// void get_best_bats(vector<Bat> &, vector<bool> &, double &);
-// vector<Bat>::iterator get_best_bats(vector<Bat> &);
+Bat get_best_bat(vector<Bat> &, Bat);
 
 #endif
