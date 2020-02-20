@@ -67,14 +67,15 @@ void Bat::movement(Bat leader) {
             else
                 this->candidate[each_bit] = 0;
         }
-        for (int each_bit = 0; each_bit < this->position.size(); ++each_bit) {
-            this->position[each_bit] = this->candidate[each_bit];
-        }
+        // for (int each_bit = 0; each_bit < this->position.size(); ++each_bit) {
+        //     this->position[each_bit] = this->candidate[each_bit];
+        // }
+        this->position = this->candidate;
     }
 
-    candidate_fitness = cost_evaluation(candidate);
+    this->candidate_fitness = cost_evaluation(this->candidate);
 
-    if ((double)rand() / (RAND_MAX + 1.0) < loudness && candidate_fitness < leader.fitness) {
+    if ((double)rand() / (RAND_MAX + 1.0) < loudness && this->candidate_fitness < leader.fitness) {
         frequency = min_frequency + (max_frequency - min_frequency) * ((double)rand() / (RAND_MAX + 1.0));
         for (int each_bit = 0; each_bit < this->velocity.size(); ++each_bit) {
             this->velocity[each_bit] = this->velocity[each_bit] + (this->position[each_bit] - leader.position[each_bit]) * frequency;
@@ -86,17 +87,34 @@ void Bat::movement(Bat leader) {
             else
                 this->candidate[each_bit] = 0;
         }
-        for (int each_bit = 0; each_bit < this->position.size(); ++each_bit) {
-            this->position[each_bit] = this->candidate[each_bit];
-        }
+        // for (int each_bit = 0; each_bit < this->position.size(); ++each_bit) {
+        //     this->position[each_bit] = this->candidate[each_bit];
+        // }
+        this->position = this->candidate;
     }
 
-    fitness = cost_evaluation(position);
+    this->fitness = cost_evaluation(this->position);
+
+
+    // this->candidate = this->position;
+
+    // int random_index = rand() % leader.position.size();
+
+    // for (int interval = 0; interval < 5; ++interval) {
+    //     this->candidate[random_index] = leader.position[random_index];
+    //     random_index = (random_index + 1) % leader.position.size();
+    // }
+
+    // this->candidate_fitness = cost_evaluation(this->candidate);
+
+    // if (this->candidate_fitness < this->fitness) {
+    //     this->position = this->candidate;
+    // }
+
+    // this->fitness = cost_evaluation(this->position);
 }
 
 Bat get_best_bat(vector<Bat> &bats, Bat defender) {
-
-
     for (vector<Bat>::iterator each_bat = bats.begin(); each_bat != bats.end(); ++each_bat) {
         if (each_bat->fitness < defender.fitness) {
             defender = *each_bat;
