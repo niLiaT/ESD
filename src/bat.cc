@@ -59,59 +59,36 @@ void echolocation(vector<Bat> &bats, Bat leader) {
 }
 
 void Bat::movement(Bat leader) {
+    for (int each_bit = 0; each_bit < this->distribution.size(); ++each_bit) {
+        this->distribution[each_bit] = this->position[each_bit] + (2 * ((double)rand() / (RAND_MAX + 1.0)) - 1) * ((double)rand() / (RAND_MAX + 1.0));
+        if ((double)rand() / (RAND_MAX + 1.0) < 1 / (1 + exp(-this->distribution[each_bit])))
+            // this->candidate[each_bit] = 1;
+            this->candidate[each_bit] = leader.position[each_bit];
+        else
+            this->candidate[each_bit] = 0;
+    }
     if ((double)rand() / (RAND_MAX + 1.0) > pulse_rate) {
-        for (int each_bit = 0; each_bit < this->distribution.size(); ++each_bit) {
-            this->distribution[each_bit] = this->position[each_bit] + (2 * ((double)rand() / (RAND_MAX + 1.0)) - 1) * ((double)rand() / (RAND_MAX + 1.0));
-            if ((double)rand() / (RAND_MAX + 1.0) < 1 / (1 + exp(-this->distribution[each_bit])))
-                this->candidate[each_bit] = 1;
-            else
-                this->candidate[each_bit] = 0;
-        }
-        // for (int each_bit = 0; each_bit < this->position.size(); ++each_bit) {
-        //     this->position[each_bit] = this->candidate[each_bit];
-        // }
         this->position = this->candidate;
+    }
+
+    frequency = min_frequency + (max_frequency - min_frequency) * ((double)rand() / (RAND_MAX + 1.0));
+    for (int each_bit = 0; each_bit < this->velocity.size(); ++each_bit) {
+        this->velocity[each_bit] = this->velocity[each_bit] + (this->position[each_bit] - leader.position[each_bit]) * frequency;
+    }
+    for (int each_bit = 0; each_bit < this->distribution.size(); ++each_bit) {
+        this->distribution[each_bit] = this->velocity[each_bit];
+        if ((double)rand() / (RAND_MAX + 1.0) < (1 / (1 + exp(-this->distribution[each_bit]))))
+            this->candidate[each_bit] = 1;
+        else
+            this->candidate[each_bit] = 0;
     }
 
     this->candidate_fitness = cost_evaluation(this->candidate);
 
     if ((double)rand() / (RAND_MAX + 1.0) < loudness && this->candidate_fitness < leader.fitness) {
-        frequency = min_frequency + (max_frequency - min_frequency) * ((double)rand() / (RAND_MAX + 1.0));
-        for (int each_bit = 0; each_bit < this->velocity.size(); ++each_bit) {
-            this->velocity[each_bit] = this->velocity[each_bit] + (this->position[each_bit] - leader.position[each_bit]) * frequency;
-        }
-        for (int each_bit = 0; each_bit < this->distribution.size(); ++each_bit) {
-            this->distribution[each_bit] = this->velocity[each_bit];
-            if ((double)rand() / (RAND_MAX + 1.0) < (1 / (1 + exp(-this->distribution[each_bit]))))
-                this->candidate[each_bit] = 1;
-            else
-                this->candidate[each_bit] = 0;
-        }
-        // for (int each_bit = 0; each_bit < this->position.size(); ++each_bit) {
-        //     this->position[each_bit] = this->candidate[each_bit];
-        // }
         this->position = this->candidate;
+        this->fitness = cost_evaluation(this->position);
     }
-
-    this->fitness = cost_evaluation(this->position);
-
-
-    // this->candidate = this->position;
-
-    // int random_index = rand() % leader.position.size();
-
-    // for (int interval = 0; interval < 5; ++interval) {
-    //     this->candidate[random_index] = leader.position[random_index];
-    //     random_index = (random_index + 1) % leader.position.size();
-    // }
-
-    // this->candidate_fitness = cost_evaluation(this->candidate);
-
-    // if (this->candidate_fitness < this->fitness) {
-    //     this->position = this->candidate;
-    // }
-
-    // this->fitness = cost_evaluation(this->position);
 }
 
 Bat get_best_bat(vector<Bat> &bats, Bat defender) {
