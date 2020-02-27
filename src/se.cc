@@ -73,6 +73,13 @@ void vision_search(vector<Region> &regions, int player_quantity) {
             each_region->candidate_goods.push_back(each_searcher->invest(each_region->goods[random_index]));
             evaluate_times++;
         }
+
+        //Reset the identity bits
+        for (vector<Good>::iterator each_good = each_region->goods.begin(); each_good != each_region->goods.end(); ++each_good) {
+            for (int index = 0; index < each_region->id_bits.size(); ++index) {
+                each_good->utility.at(index) = each_region->id_bits.at(index);
+            }
+        }
     }
 
     //Calculate expected value
@@ -180,7 +187,7 @@ Searcher::Searcher(int dimension) {
 Good Searcher::invest(Good good) {
     bool temp;
     int start_bit = rand() % good.utility.size();
-    int length = 10, random_index;
+    int length = 20, random_index;
     // int length = rand() % good.utility.size(), random_index;
     int size = good.utility.size();
 
