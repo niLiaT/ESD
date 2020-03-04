@@ -62,10 +62,11 @@ void resource_arrangement(vector<Region> &regions) {
 
 void vision_search(vector<Region> &regions, int player_quantity) {
     int random_index = 0;
-    double investment_record = 0; //Mu
-    double average_profit = 0; //Nu
-    double best_price = 0; //Rho
-    double total_price = 0;
+    double investment_record = 0.0; //Mu
+    double average_profit = 0.0; //Nu
+    double best_price = 0.0; //Rho
+    double total_price = 0.0;
+    vector<Searcher>::iterator worst_searcher;
     vector<Region>::iterator defending_champion;
     vector<Region>::iterator challenger;
 
@@ -85,14 +86,19 @@ void vision_search(vector<Region> &regions, int player_quantity) {
     //Calculate expected value
     for (vector<Region>::iterator each_region = regions.begin(); each_region != regions.end(); ++each_region) {
         //Calculate mu, formula (2)
-        investment_record = each_region->invested_times / each_region->univested_times;
+        investment_record = (double)(each_region->univested_times) / (double)(each_region->invested_times);
 
         //Calculate nu, formula (3)
         average_profit = 0;
+        worst_searcher = each_region->searchers.begin();
         for (vector<Searcher>::iterator each_searcher = each_region->searchers.begin(); each_searcher != each_region->searchers.end(); ++each_searcher) {
             average_profit += each_searcher->profit;
+            if (each_searcher->profit > worst_searcher->profit) {
+                worst_searcher = each_searcher;
+            }
         }
         average_profit /= each_region->searchers.size();
+        average_profit /= worst_searcher->profit;
     
         //Calculate rho, formula (4)
         total_price = 0;
@@ -115,7 +121,7 @@ void vision_search(vector<Region> &regions, int player_quantity) {
             defending_champion = regions.begin() + (rand() % regions.size());
             for (int round = 0; round < player_quantity - 1; ++round) {
                 challenger = regions.begin() + (rand() % regions.size());
-                if (challenger->expected_value < defending_champion->expected_value) {
+                if (challenger->expected_value > defending_champion->expected_value) {
                     defending_champion = challenger;
                 }
             }
