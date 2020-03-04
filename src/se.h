@@ -5,6 +5,7 @@
 #include <vector>
 #include "connection.h"
 #include <algorithm>
+#include <tuple>
 
 using namespace std;
 
@@ -34,7 +35,8 @@ public:
     vector<Searcher> candidate_searchers; //Temporary searchers of the region
     vector<Good> goods; //Goods of the region
     vector<Good> candidate_goods; //Temporary goods of the region
-    vector<bool> id_bits; //Identity bits
+    // vector<bool> id_bits; //Identity bits
+    tuple<int, int> id_bits_range; //The range of identity bits number of the region
     Good best_good = Good(0); //Best good of a region
     double expected_value;
 };

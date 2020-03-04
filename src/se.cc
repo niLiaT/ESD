@@ -1,7 +1,5 @@
 #include "se.h"
 
-vector<bool> decimal_to_binary(int, int);
-
 int evaluate_times = 0;
 
 void se(int max_evaluate_times, int dimension, int region_quantity, int searcher_quantity, int good_quantity, int player_quantity) {
@@ -37,17 +35,26 @@ vector<Region> initialization(int region_quantity, int searcher_quantity, int go
 }
 
 void resource_arrangement(vector<Region> &regions) {
-    double id_bits_number = ceil(log2(regions.size())); //Identity bits length
-
+    //Divide the market by the gate way numbers
+    int quota = floor(gate_way_number / regions.size());
     for (int each_region = 0; each_region < regions.size(); ++each_region) {
-        //Divide the market by the identity bits in binary
-        (regions[each_region].id_bits).resize(id_bits_number);
-        regions[each_region].id_bits = decimal_to_binary(each_region, id_bits_number); //Change its order into binary as its identity bits
+        regions[each_region].id_bits_range = make_tuple(each_region * quota, (each_region + 1) * quota - 1);
+    }
+    get<1>(regions[regions.size()].id_bits_range) += gate_way_number % regions.size();
 
-        //Allocate the goods into each regions by set the identity bits of each good
-        for (vector<Good>::iterator each_good = regions[each_region].goods.begin(); each_good != regions[each_region].goods.end(); ++each_good) {
-            for (int each_bit = 0; each_bit < id_bits_number; ++each_bit) {
-                each_good->utility[each_bit] = regions[each_region].id_bits[each_bit];
+    //Allocate goods into each region
+    int random_number;
+    vector<bool> temp(gate_way_number), reset(gate_way_number, false);
+    for (vector<Region>::iterator each_region = regions.begin(); each_region != regions.end(); ++each_region) {
+        for (vector<Good>::iterator each_good = each_region->goods.begin(); each_good != each_region->goods.end(); ++each_good) {
+            temp = reset;
+            random_number = rand() % (get<1>(each_region->id_bits_range) - get<0>(each_region->id_bits_range) + 1) + get<0>(each_region->id_bits_range);
+            for (int each_bit = 0; each_bit < random_number; ++each_bit) {
+                temp.at(each_bit) = true;
+            }
+            random_shuffle(temp.begin(), temp.end());
+            for (int each_bit = 0; each_bit < gate_way_number; ++each_bit) {
+                each_good->utility.at(each_bit) = temp.at(each_bit);
             }
         }
     }
@@ -72,13 +79,6 @@ void vision_search(vector<Region> &regions, int player_quantity) {
               and the new good will be pushed into the candidate list to be determined.*/
             each_region->candidate_goods.push_back(each_searcher->invest(each_region->goods[random_index]));
             evaluate_times++;
-        }
-
-        //Reset the identity bits
-        for (vector<Good>::iterator each_good = each_region->goods.begin(); each_good != each_region->goods.end(); ++each_good) {
-            for (int index = 0; index < each_region->id_bits.size(); ++index) {
-                each_good->utility.at(index) = each_region->id_bits.at(index);
-            }
         }
     }
 
@@ -188,10 +188,13 @@ Good Searcher::invest(Good good) {
     bool temp;
     int start_bit = rand() % good.utility.size();
     int length = 20, random_index;
-    // int length = rand() % good.utility.size(), random_index;
     int size = good.utility.size();
+    vector<bool> id_bits(gate_way_number);
 
     this->candidate_investment = this->investment;
+    for (int each_bit = 0; each_bit < id_bits.size(); ++each_bit) {
+        id_bits.at(each_bit) = good.utility.at(each_bit);
+    }
 
     //Crossover
     for (int index = 0; index < length; ++index) {
@@ -204,6 +207,10 @@ Good Searcher::invest(Good good) {
     random_index = rand() % size;
     this->candidate_investment[random_index] = ~this->candidate_investment[random_index];
     good.utility[random_index] = ~good.utility[random_index];
+
+    for (int each_bit = 0; each_bit < id_bits.size(); ++each_bit) {
+        good.utility.at(each_bit) = id_bits.at(each_bit);
+    }
 
     //Update investment
     good.price = cost_evaluation(good.utility);
@@ -232,17 +239,3 @@ Region::Region(int searcher_quantity, int goods_quantity, int dimension) {
     this->univested_times = 1;
     this->expected_value = 0.0;
 };
-
-vector<bool> decimal_to_binary(int decimal_number, int length) {
-    vector<bool> binary_number(length, false);
-    int i = 0;
-    while (decimal_number > 0) {
-        binary_number[i] = decimal_number % 2;
-        decimal_number /= 2;
-        i++;
-    }
-
-    reverse(binary_number.begin(), binary_number.end());
-
-    return binary_number;
-}
