@@ -156,6 +156,11 @@ void connect(vector<bool> device_status) {
             if ((*each_edge_device).status) {
                 if ((temp = distance((*each_agv).x, (*each_agv).y, (*each_edge_device).x, (*each_edge_device).y)) < shortest) {
                     shortest = temp;
+                    if ((*each_agv).link != NULL) {
+                        (*(*each_agv).link).link_quantity--;
+                        (*(*each_agv).link).demand -= (*each_agv).demand;
+                        (*each_agv).link = NULL;
+                    }
                     (*each_agv).link = &(*each_edge_device);
                     (*each_agv).distance = shortest;
                     (*each_edge_device).link_quantity++;
@@ -173,6 +178,11 @@ void connect(vector<bool> device_status) {
                 if ((*each_fog_device).status) {
                     if ((temp = distance((*each_edge_device).x, (*each_edge_device).y, (*each_fog_device).x, (*each_fog_device).y)) < shortest) {
                         shortest = temp;
+                        if ((*each_edge_device).link != NULL) {
+                            (*(*each_edge_device).link).link_quantity--;
+                            (*(*each_edge_device).link).demand -= (*each_edge_device).demand;
+                            (*each_edge_device).link = NULL;
+                        }
                         (*each_edge_device).link = &(*each_fog_device);
                         (*each_edge_device).distance = shortest;
                         (*each_fog_device).link_quantity++;
@@ -191,10 +201,15 @@ void connect(vector<bool> device_status) {
                 if ((*each_gate_way).status) {
                     if ((temp = distance((*each_fog_device).x, (*each_fog_device).y, (*each_gate_way).x, (*each_gate_way).y)) < shortest) {
                         shortest = temp;
+                        if ((*each_fog_device).link != NULL) {
+                            (*(*each_fog_device).link).link_quantity--;
+                            (*(*each_fog_device).link).demand -= (*each_fog_device).demand;
+                            (*each_fog_device).link = NULL;
+                        }
                         (*each_fog_device).link = &(*each_gate_way);
                         (*each_fog_device).distance = shortest;
                         (*each_gate_way).link_quantity++;
-                        (*each_gate_way).demand += (*each_gate_way).demand;
+                        (*each_gate_way).demand += (*each_fog_device).demand;
                     }
                 }
             }
