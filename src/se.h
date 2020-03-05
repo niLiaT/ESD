@@ -39,6 +39,7 @@ public:
     tuple<int, int> id_bits_range; //The range of identity bits number of the region
     Good best_good = Good(0); //Best good of a region
     double expected_value;
+    void reset_id_bits();
 };
 
 void se(int, int, int, int, int, int);
