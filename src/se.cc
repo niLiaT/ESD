@@ -195,7 +195,7 @@ Searcher::Searcher(int dimension) {
 Good Searcher::invest(Good good) {
     bool temp;
     int start_bit = rand() % good.utility.size();
-    int length = 20, random_index;
+    int length = 5, random_index;
     int size = good.utility.size();
     vector<bool> id_bits(gate_way_number);
 
