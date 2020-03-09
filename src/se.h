@@ -23,7 +23,7 @@ public:
     vector<bool> candidate_investment; //Temporary investment
     double profit; //Fitness value of a searcher's investment
     double candidate_profit; //Fitness value of a temporary investment
-    Good invest(Good);
+    Good invest(Good); //A function for investing a good
 };
 
 class Region {
@@ -38,8 +38,8 @@ public:
     // vector<bool> id_bits; //Identity bits
     tuple<int, int> id_bits_range; //The range of identity bits number of the region
     Good best_good = Good(0); //Best good of a region
-    double expected_value;
-    void reset_id_bits();
+    double expected_value; //E
+    void reset_id_bits(); //Reset identity bits to insure a good still stay in the region after 
 };
 
 void se(int, int, int, int, int, int);
