@@ -157,6 +157,8 @@ Good marketing_research(vector<Region> &regions) {
             }
         }
 
+        each_region->candidate_goods.clear();
+
         //Find the best good of a region
         for (vector<Good>::iterator each_good = each_region->goods.begin(); each_good != each_region->goods.end(); ++each_good) {
             if (each_good->price < each_region->best_good.price) {
@@ -249,27 +251,6 @@ Region::Region(int searcher_quantity, int goods_quantity, int dimension) {
 };
 
 void Region::reset_id_bits () {
-    // int random_number;
-    // vector<bool> temp(gate_way_number), reset(gate_way_number, false);
-    // Good temp_good(0);
-
-    // for (vector<Good>::iterator each_good = this->goods.begin(); each_good != this->goods.end(); ++each_good) {
-    //     temp = reset;
-    //     random_number = rand() % (get<1>(this->id_bits_range) - get<0>(this->id_bits_range) + 1) + get<0>(this->id_bits_range);
-    //     for (int each_bit = 0; each_bit < random_number; ++each_bit) {
-    //         temp.at(each_bit) = true;
-    //     }
-    //     random_shuffle(temp.begin(), temp.end());
-    //     temp_good = *each_good;
-    //     for (int each_bit = 0; each_bit < temp.size(); ++each_bit) {
-    //         temp_good.utility.at(each_bit) = temp.at(each_bit);
-    //     }
-    //     temp_good.price = cost_evaluation(temp_good.utility);
-    //     if (temp_good.price < each_good->price) {
-    //         *each_good = temp_good;
-    //     }
-    // }
-
     for (vector<Good>::iterator each_good = this->goods.begin(); each_good != this->goods.end(); ++each_good) {
         int temp_price;
         int random_index = rand() % gate_way_number;
