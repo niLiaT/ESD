@@ -14,6 +14,7 @@ public:
     Good(int);
     vector<bool> utility; //Solution form of a good
     double price; //Fitness value of a good
+    int id_bits_number; //Numbers of identity bits
 };
 
 class Searcher {

@@ -40,7 +40,7 @@ void resource_arrangement(vector<Region> &regions) {
     for (int each_region = 0; each_region < regions.size(); ++each_region) {
         regions[each_region].id_bits_range = make_tuple(each_region * quota, (each_region + 1) * quota - 1);
     }
-    get<1>(regions[regions.size()].id_bits_range) += gate_way_number % regions.size();
+    get<1>(regions[regions.size() - 1].id_bits_range) += gate_way_number % regions.size() + 1;
 
     //Allocate goods into each region
     int random_number;
@@ -56,6 +56,7 @@ void resource_arrangement(vector<Region> &regions) {
             for (int each_bit = 0; each_bit < gate_way_number; ++each_bit) {
                 each_good->utility.at(each_bit) = temp.at(each_bit);
             }
+            each_good->id_bits_number = gate_way_number;
         }
     }
 }
@@ -199,7 +200,7 @@ Good Searcher::invest(Good good) {
     int start_bit = rand() % good.utility.size();
     int length = 5, random_index;
     int size = good.utility.size();
-    vector<bool> id_bits(gate_way_number);
+    vector<bool> id_bits(good.id_bits_number);
 
     this->candidate_investment = this->investment;
     for (int each_bit = 0; each_bit < id_bits.size(); ++each_bit) {
@@ -240,6 +241,7 @@ Good::Good(int dimension) {
         *each_dimension = rand() % 2;
     }
     this->price = cost_evaluation(this->utility);
+    this->id_bits_number = 0;
 };
 
 Region::Region(int searcher_quantity, int goods_quantity, int dimension) {
@@ -250,17 +252,49 @@ Region::Region(int searcher_quantity, int goods_quantity, int dimension) {
     this->expected_value = 0.0;
 };
 
+bool check_sum(vector<bool>::iterator begin, vector<bool>::iterator end, tuple<int, int> range) {
+    int sum = 0;
+    for (vector<bool>::iterator each_bit = begin; each_bit != end; ++each_bit) {
+        sum += *each_bit;
+    }
+
+    if (sum >= get<0>(range) && sum <= get<1>(range)) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
 void Region::reset_id_bits () {
+    double temp_price;
+    vector<bool>::iterator index_1, index_2;
+    int index_3;
+    vector<bool> temp_id_bits(this->goods[0].id_bits_number);
+
     for (vector<Good>::iterator each_good = this->goods.begin(); each_good != this->goods.end(); ++each_good) {
-        int temp_price;
-        int random_index = rand() % gate_way_number;
-        each_good->utility.at(random_index) = ~each_good->utility.at(random_index);
-        temp_price = cost_evaluation(each_good->utility);
-        if (temp_price < each_good->price) {
+        temp_id_bits.assign(each_good->utility.begin(), each_good->utility.begin() + each_good->id_bits_number);
+
+        index_1 = each_good->utility.begin() + (rand() % each_good->id_bits_number);
+        index_2 = each_good->utility.begin() + (rand() % each_good->id_bits_number);
+
+        iter_swap(index_1, index_2);
+
+        // do {
+        //     index_3 = rand() % each_good->id_bits_number;
+        //     each_good->utility[index_3] = ~each_good->utility[index_3];
+        // } while (!check_sum(each_good->utility.begin(), each_good->utility.begin() + each_good->id_bits_number, this->id_bits_range));
+
+        index_3 = rand() % each_good->id_bits_number;
+        each_good->utility[index_3] = ~each_good->utility[index_3];
+
+        if ((temp_price = cost_evaluation(each_good->utility)) < each_good->price) {
             each_good->price = temp_price;
         }
         else {
-            each_good->utility.at(random_index) = ~each_good->utility.at(random_index);
+            for (int index = 0; index < each_good->id_bits_number; ++index) {
+                each_good->utility[index] = temp_id_bits[index];
+            }
         }
     }
 }
