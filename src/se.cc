@@ -38,9 +38,9 @@ void resource_arrangement(vector<Region> &regions) {
     //Divide the market by the gate way numbers
     int quota = floor(gate_way_number / regions.size());
     for (int each_region = 0; each_region < regions.size(); ++each_region) {
-        regions[each_region].id_bits_range = make_tuple(each_region * quota, (each_region + 1) * quota - 1);
+        regions[each_region].id_bits_range = make_pair(each_region * quota, (each_region + 1) * quota - 1);
     }
-    get<1>(regions[regions.size() - 1].id_bits_range) += gate_way_number % regions.size() + 1;
+    regions[regions.size() - 1].id_bits_range.second += gate_way_number % regions.size() + 1;
 
     //Allocate goods into each region
     int random_number;
@@ -48,7 +48,7 @@ void resource_arrangement(vector<Region> &regions) {
     for (vector<Region>::iterator each_region = regions.begin(); each_region != regions.end(); ++each_region) {
         for (vector<Good>::iterator each_good = each_region->goods.begin(); each_good != each_region->goods.end(); ++each_good) {
             temp = reset;
-            random_number = rand() % (get<1>(each_region->id_bits_range) - get<0>(each_region->id_bits_range) + 1) + get<0>(each_region->id_bits_range);
+            random_number = rand() % (each_region->id_bits_range.second - each_region->id_bits_range.first + 1) + each_region->id_bits_range.first;
             for (int each_bit = 0; each_bit < random_number; ++each_bit) {
                 temp.at(each_bit) = true;
             }
@@ -90,6 +90,7 @@ void vision_search(vector<Region> &regions, int player_quantity) {
     for (vector<Region>::iterator each_region = regions.begin(); each_region != regions.end(); ++each_region) {
         //Calculate mu, formula (2)
         investment_record = (double)(each_region->univested_times) / (double)(each_region->invested_times);
+        each_region->mu = investment_record;
 
         //Calculate nu, formula (3)
         average_profit = 0;
@@ -102,6 +103,9 @@ void vision_search(vector<Region> &regions, int player_quantity) {
         }
         average_profit /= each_region->searchers.size();
         average_profit /= worst_searcher->profit;
+        if (each_region->searchers.size() != 0) {
+            each_region->nu = average_profit;
+        }
     
         //Calculate rho, formula (4)
         total_price = 0;
@@ -109,9 +113,10 @@ void vision_search(vector<Region> &regions, int player_quantity) {
             total_price += each_good->price;
         }
         best_price = each_region->best_good.price / total_price;
+        each_region->rho = best_price;
 
         //Calculate the expected value, formula (1)
-        each_region->expected_value = investment_record * average_profit * best_price;
+        each_region->expected_value = each_region->mu * each_region->nu * each_region->rho;
     }
 
     //Determination by tournament
@@ -250,6 +255,9 @@ Region::Region(int searcher_quantity, int goods_quantity, int dimension) {
     this->invested_times = 1;
     this->univested_times = 1;
     this->expected_value = 0.0;
+    this->mu = 0.0;
+    this->nu = 0.0;
+    this->rho = 0.0;
 };
 
 bool check_sum(vector<bool>::iterator begin, vector<bool>::iterator end, tuple<int, int> range) {

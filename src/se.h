@@ -37,8 +37,9 @@ public:
     vector<Good> goods; //Goods of the region
     vector<Good> candidate_goods; //Temporary goods of the region
     // vector<bool> id_bits; //Identity bits
-    tuple<int, int> id_bits_range; //The range of identity bits number of the region
+    pair<int, int> id_bits_range; // The range of identity bits number of the region
     Good best_good = Good(0); //Best good of a region
+    double mu, nu, rho;
     double expected_value; //E
     void reset_id_bits(); //Reset identity bits to insure a good still stay in the region after 
 };
