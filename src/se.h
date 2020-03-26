@@ -11,6 +11,7 @@ using namespace std;
 
 class Good {
 public:
+    Good();
     Good(int);
     vector<bool> utility; //Solution form of a good
     double price; //Fitness value of a good
@@ -19,6 +20,7 @@ public:
 
 class Searcher {
 public:
+    Searcher();
     Searcher(int);
     vector<bool> investment; //Solution held by a searcher
     vector<bool> candidate_investment; //Temporary investment
@@ -38,7 +40,7 @@ public:
     vector<Good> candidate_goods; //Temporary goods of the region
     // vector<bool> id_bits; //Identity bits
     pair<int, int> id_bits_range; // The range of identity bits number of the region
-    Good best_good = Good(0); //Best good of a region
+    vector<Good>::iterator best_good; //Best good of a region
     double mu, nu, rho;
     double expected_value; //E
     void reset_id_bits(); //Reset identity bits to insure a good still stay in the region after 

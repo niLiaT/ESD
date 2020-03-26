@@ -23,12 +23,18 @@ vector<Region> initialization(int region_quantity, int searcher_quantity, int go
     vector<Region> sub_markets(region_quantity, Region(searcher_quantity, good_quantity, dimension));
 
     for (vector<Region>::iterator each_submarket = sub_markets.begin(); each_submarket != sub_markets.end(); ++each_submarket) {
-        each_submarket->best_good.price = DBL_MAX;
-        for (vector<Good>::iterator each_good = each_submarket->goods.begin(); each_good != each_submarket->goods.end(); ++each_good) {
-            if (each_good->price < each_submarket->best_good.price) {
-                each_submarket->best_good = *each_good;
+        each_submarket->best_good = each_submarket->goods.begin();
+        for (vector<Good>::iterator each_good = each_submarket->goods.begin() + 1; each_good != each_submarket->goods.end(); ++each_good) {
+            if (each_good->price < each_submarket->best_good->price) {
+                each_submarket->best_good = each_good;
             }
         }
+        // each_submarket->best_good.price = DBL_MAX;
+        // for (vector<Good>::iterator each_good = each_submarket->goods.begin(); each_good != each_submarket->goods.end(); ++each_good) {
+        //     if (each_good->price < each_submarket->best_good.price) {
+        //         each_submarket->best_good = *each_good;
+        //     }
+        // }
     }
 
     return sub_markets;
@@ -112,7 +118,7 @@ void vision_search(vector<Region> &regions, int player_quantity) {
         for (vector<Good>::iterator each_good = each_region->goods.begin(); each_good != each_region->goods.end(); ++each_good) {
             total_price += each_good->price;
         }
-        best_price = each_region->best_good.price / total_price;
+        best_price = each_region->best_good->price / total_price;
         each_region->rho = best_price;
 
         //Calculate the expected value, formula (1)
@@ -167,14 +173,14 @@ Good marketing_research(vector<Region> &regions) {
 
         //Find the best good of a region
         for (vector<Good>::iterator each_good = each_region->goods.begin(); each_good != each_region->goods.end(); ++each_good) {
-            if (each_good->price < each_region->best_good.price) {
-                each_region->best_good = *each_good;
+            if (each_good->price < each_region->best_good->price) {
+                each_region->best_good = each_good;
             }
         }
 
         //Find the best good of the market
-        if (each_region->best_good.price < optimal.price) {
-            optimal = each_region->best_good;
+        if (each_region->best_good->id_bits_number < optimal.price) {
+            optimal = *(each_region->best_good);
         }
 
         //Update the investment record
@@ -190,15 +196,6 @@ Good marketing_research(vector<Region> &regions) {
 
     return optimal;
 }
-
-Searcher::Searcher(int dimension) {
-    //Initialize the investment and its profit of a searcher
-    this->investment.resize(dimension);
-    for (vector<bool>::iterator each_dimension = (this->investment).begin(); each_dimension != (this->investment).end(); ++each_dimension) {
-        *each_dimension = rand() % 2;
-    }
-    this->profit = cost_evaluation(this->investment);
-};
 
 Good Searcher::invest(Good good) {
     bool temp;
@@ -239,6 +236,21 @@ Good Searcher::invest(Good good) {
     return good;
 }
 
+Searcher::Searcher() {
+};
+
+Searcher::Searcher(int dimension) {
+    //Initialize the investment and its profit of a searcher
+    this->investment.resize(dimension);
+    for (vector<bool>::iterator each_dimension = (this->investment).begin(); each_dimension != (this->investment).end(); ++each_dimension) {
+        *each_dimension = rand() % 2;
+    }
+    this->profit = cost_evaluation(this->investment);
+};
+
+Good::Good() {
+}
+
 Good::Good(int dimension) {
     //Initialization the good utility and its price of a good
     this->utility.resize(dimension);
@@ -250,8 +262,14 @@ Good::Good(int dimension) {
 };
 
 Region::Region(int searcher_quantity, int goods_quantity, int dimension) {
-    this->searchers.resize(searcher_quantity, Searcher(dimension));
-    this->goods.resize(goods_quantity, Good(dimension));
+    this->searchers.resize(searcher_quantity, Searcher());
+    for (vector<Searcher>::iterator each_searcher = searchers.begin(); each_searcher != searchers.end(); ++each_searcher) {
+        *each_searcher = Searcher(dimension);
+    }
+    this->goods.resize(goods_quantity, Good());
+    for (vector<Good>::iterator each_good = goods.begin(); each_good != goods.end(); ++each_good) {
+        *each_good = Good(dimension);
+    }
     this->invested_times = 1;
     this->univested_times = 1;
     this->expected_value = 0.0;
@@ -260,13 +278,13 @@ Region::Region(int searcher_quantity, int goods_quantity, int dimension) {
     this->rho = 0.0;
 };
 
-bool check_sum(vector<bool>::iterator begin, vector<bool>::iterator end, tuple<int, int> range) {
+bool check_sum(vector<bool>target, int number, pair<int, int> range) {
     int sum = 0;
-    for (vector<bool>::iterator each_bit = begin; each_bit != end; ++each_bit) {
-        sum += *each_bit;
+    for (int each_bit = 0; each_bit < number; ++each_bit) {
+        sum += target.at(each_bit);
     }
 
-    if (sum >= get<0>(range) && sum <= get<1>(range)) {
+    if (sum >= range.first && sum <= range.second) {
         return true;
     }
     else {
@@ -291,7 +309,7 @@ void Region::reset_id_bits () {
         // do {
         //     index_3 = rand() % each_good->id_bits_number;
         //     each_good->utility[index_3] = ~each_good->utility[index_3];
-        // } while (!check_sum(each_good->utility.begin(), each_good->utility.begin() + each_good->id_bits_number, this->id_bits_range));
+        // } while (!check_sum(each_good->utility, each_good->id_bits_number, this->id_bits_range));
 
         index_3 = rand() % each_good->id_bits_number;
         each_good->utility[index_3] = ~each_good->utility[index_3];
