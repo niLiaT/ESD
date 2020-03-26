@@ -10,6 +10,7 @@ using namespace std;
 
 class Monkey {
 public:
+    Monkey();
     Monkey(int);
 
     vector<bool> position;

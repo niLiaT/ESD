@@ -11,7 +11,11 @@ template <typename T> void write_vector_range(vector<T> &target_vec, vector<T> s
 int evaluate_times = 0;
 
 void dmga(const int iterations, int dimension, int monkey_quantity) {
-    vector<Monkey> monkeys(monkey_quantity, Monkey(dimension));
+    vector<Monkey> monkeys(monkey_quantity, Monkey());
+    for (vector<Monkey>::iterator each_monkey = monkeys.begin(); each_monkey != monkeys.end(); ++each_monkey) {
+        *each_monkey = Monkey(dimension);
+    }
+
     int counter = 0;
     
     initialization(monkeys);
@@ -30,6 +34,9 @@ void dmga(const int iterations, int dimension, int monkey_quantity) {
 
         cout << evaluate_times << "," << best_monkey(monkeys) << endl;
     }
+}
+
+Monkey::Monkey() {
 }
 
 Monkey::Monkey(int dimension) {
