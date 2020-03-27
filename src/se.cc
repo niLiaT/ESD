@@ -219,7 +219,7 @@ Good Searcher::invest(Good good) {
         good.utility.at(each_bit) = id_bits.at(each_bit);
     }
 
-    //Update investment
+    //Update investment of a searcher by a greedy strategy
     good.price = cost_evaluation(good.utility);
     this->candidate_profit = cost_evaluation(this->candidate_investment);
     if (this->candidate_profit < this->profit) {
@@ -230,9 +230,9 @@ Good Searcher::invest(Good good) {
     return good;
 }
 
+// Constructor of a Searcher, input with no argument is an overloading for initialize a empty searcher
 Searcher::Searcher() {
 };
-
 Searcher::Searcher(int dimension) {
     //Initialize the investment and its profit of a searcher
     this->investment.resize(dimension);
@@ -242,9 +242,9 @@ Searcher::Searcher(int dimension) {
     this->profit = cost_evaluation(this->investment);
 };
 
+// Constructor of a Good, input with no argument is an overloading for initialize a empty good
 Good::Good() {
 }
-
 Good::Good(int dimension) {
     //Initialization the good utility and its price of a good
     this->utility.resize(dimension);
@@ -255,6 +255,7 @@ Good::Good(int dimension) {
     this->id_bits_number = 0;
 };
 
+// Constructor of a Region, the searchers and goods belonging to a specific region will be create in this constructor
 Region::Region(int searcher_quantity, int goods_quantity, int dimension) {
     this->searchers.resize(searcher_quantity, Searcher());
     for (vector<Searcher>::iterator each_searcher = searchers.begin(); each_searcher != searchers.end(); ++each_searcher) {
@@ -272,6 +273,7 @@ Region::Region(int searcher_quantity, int goods_quantity, int dimension) {
     this->rho = 0.0;
 };
 
+// Check if the sum of the identity bits will within the range of the region which its belonging
 bool check_sum(vector<bool>target, int number, pair<int, int> range) {
     int sum = 0;
     for (int each_bit = 0; each_bit < number; ++each_bit) {
@@ -286,6 +288,7 @@ bool check_sum(vector<bool>target, int number, pair<int, int> range) {
     }
 }
 
+// Reset the identity bits to make sure that a good will stay in the region that it should be within
 void Region::reset_id_bits () {
     double temp_price;
     vector<bool>::iterator index_1, index_2;
