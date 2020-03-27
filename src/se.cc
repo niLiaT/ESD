@@ -29,12 +29,6 @@ vector<Region> initialization(int region_quantity, int searcher_quantity, int go
                 each_submarket->best_good = each_good;
             }
         }
-        // each_submarket->best_good.price = DBL_MAX;
-        // for (vector<Good>::iterator each_good = each_submarket->goods.begin(); each_good != each_submarket->goods.end(); ++each_good) {
-        //     if (each_good->price < each_submarket->best_good.price) {
-        //         each_submarket->best_good = *each_good;
-        //     }
-        // }
     }
 
     return sub_markets;
@@ -219,7 +213,7 @@ Good Searcher::invest(Good good) {
     //Mutation
     random_index = rand() % size;
     this->candidate_investment[random_index] = ~this->candidate_investment[random_index];
-    good.utility[random_index] = ~good.utility[random_index];
+    good.utility[random_index] = !good.utility[random_index];
 
     for (int each_bit = 0; each_bit < id_bits.size(); ++each_bit) {
         good.utility.at(each_bit) = id_bits.at(each_bit);
@@ -306,13 +300,13 @@ void Region::reset_id_bits () {
 
         iter_swap(index_1, index_2);
 
-        // do {
-        //     index_3 = rand() % each_good->id_bits_number;
-        //     each_good->utility[index_3] = ~each_good->utility[index_3];
-        // } while (!check_sum(each_good->utility, each_good->id_bits_number, this->id_bits_range));
+        do {
+            index_3 = rand() % each_good->id_bits_number;
+            each_good->utility[index_3] = !each_good->utility[index_3];
+        } while (!check_sum(each_good->utility, each_good->id_bits_number, this->id_bits_range));
 
         index_3 = rand() % each_good->id_bits_number;
-        each_good->utility[index_3] = ~each_good->utility[index_3];
+        each_good->utility[index_3] = !each_good->utility[index_3];
 
         if ((temp_price = cost_evaluation(each_good->utility)) < each_good->price) {
             each_good->price = temp_price;
