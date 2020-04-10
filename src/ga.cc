@@ -22,7 +22,7 @@ void ga(int max_evaluate_times, int dimension, int chromosome_quantity, int play
         evaluation(chromosomes);
         best_chromosome = determination(chromosomes, best_chromosome);
 
-        cout << best_chromosome.fitness << endl;
+        cout << evaluate_times << "," << best_chromosome.fitness << endl;
     }
 }
 
@@ -70,7 +70,7 @@ vector<Chromosome> crossover(vector<Chromosome> children, float crossover_rate) 
             index1 = number * 2;
             index2 = index1 + 1;
             start = rand() % children.at(index1).dna.size();
-            for (int bit = start; bit < interval; ++bit) {
+            for (int bit = start; bit < start + interval; ++bit) {
                 temp = children.at(index1).dna.at(bit % children.at(index1).dna.size());
                 children.at(index1).dna.at(bit % children.at(index1).dna.size()) = children.at(index2).dna.at(bit % children.at(index2).dna.size());
                 children.at(index2).dna.at(bit % children.at(index2).dna.size()) = temp;
@@ -86,7 +86,7 @@ vector<Chromosome> mutation(vector<Chromosome> children, float mutation_rate) {
     for (int number = 0; number < children.size(); ++number) {
         if ((double)rand() / (double)DBL_MAX < mutation_rate) {
             index = rand() % children.at(number).dna.size();
-            children.at(number).dna.at(index) = ~children.at(number).dna.at(index);
+            children.at(number).dna.at(index) = !children.at(number).dna.at(index);
         }
     }
 
