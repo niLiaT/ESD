@@ -1,7 +1,7 @@
 #include <iostream>
 #include <math.h>
 #include <time.h>
-#include "se.h"
+#include "ga.h"
 
 using namespace std;
 
@@ -11,14 +11,11 @@ int main(int argc, char *argv[]) {
     char *dataset = argv[1];
     int iterations = atoi(argv[2]);
     int solution_length = atoi(argv[3]);
-    int regions = atoi(argv[4]);
-    int searchers = atoi(argv[5]);
-    int goods = atoi(argv[6]);
-    int players = atoi(argv[7]);
+    int population = atoi(argv[4]);
 
     input(dataset);
 
-    se(iterations, solution_length, regions, searchers, goods, players);
+    ga(iterations, solution_length, population);
 
     return 0;
 }
