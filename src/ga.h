@@ -6,8 +6,14 @@
 #include "connection.h"
 #include <algorithm>
 
+class Chromosome {
+public:
+    vector<bool> dna;
+    double fitness;
 
+    Chromosome(int);
+};
 
-void ga(int, int, int);
+void ga(int, int, int, int, float, float);
 
 #endif
