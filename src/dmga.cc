@@ -45,7 +45,6 @@ Monkey::Monkey(int dimension) {
 
 void initialization(vector<Monkey> &monkeys) {
     //Random generate the solution of each monkey
-    // build();
 
     for (vector<Monkey>::iterator each_monkey = monkeys.begin(); each_monkey != monkeys.end(); ++each_monkey) {
         for (vector<bool>::iterator each_bit = each_monkey->position.begin(); each_bit != each_monkey->position.end(); ++each_bit) {
@@ -56,55 +55,52 @@ void initialization(vector<Monkey> &monkeys) {
 }
 
 vector<bool> large_step(vector<bool> solution) {
-    vector<bool> temp;
-
-    temp = solution;
+    vector<bool> step_distance(solution.size(), 0);
 
     for (int each_bit = 0; each_bit < solution.size(); ++each_bit) {
         if (rand() % 2 == 0) {
-            temp[each_bit] = (solution[each_bit] + 1) % 2;
+            step_distance[each_bit] = (solution[each_bit] + 1) % 2;
         }
     }
 
-    return temp;
+    return step_distance;
 }
 
 vector<bool> small_step(vector<bool> solution) {
-    vector<bool> temp;
+    vector<bool> step_distance(solution.size(), 0);
     int bit_index = rand() % solution.size();
 
-    temp = solution;
-    temp[bit_index] = temp[bit_index] + (solution[bit_index] + 1) % 2;
+    step_distance[bit_index] = (solution[bit_index] + 1) % 2;
 
-    return temp;
+    return step_distance;
 }
 
 void climb(vector<Monkey> &monkeys) {
     double new_fitness;
-    vector<bool> temp_position;
+    vector<bool> step;
 
     for (vector<Monkey>::iterator each_monkey = monkeys.begin(); each_monkey != monkeys.end(); ++each_monkey) {
         for (int step_number = 0; step_number < max_number; ++step_number) {
-            temp_position = large_step(each_monkey->position);
-            for (int each_bit = 0; each_bit < temp_position.size(); ++each_bit) {
-                temp_position[each_bit] = temp_position[each_bit] + each_monkey->position[each_bit];
+            step = large_step(each_monkey->position);
+            for (int each_bit = 0; each_bit < step.size(); ++each_bit) {
+                step[each_bit] = step[each_bit] + each_monkey->position[each_bit];
             }
-            new_fitness = cost_evaluation(temp_position);
+            new_fitness = cost_evaluation(step);
             evaluate_times++;
             if (new_fitness < each_monkey->fitness) {
-                each_monkey->position = temp_position;
+                each_monkey->position = step;
                 each_monkey->fitness = new_fitness;
             }
         }
         for (int step_number = 0; step_number < max_number; ++step_number) {
-            temp_position = small_step(each_monkey->position);
-            for (int each_bit = 0; each_bit < temp_position.size(); ++each_bit) {
-                temp_position[each_bit] = temp_position[each_bit] + each_monkey->position[each_bit];
+            step = small_step(each_monkey->position);
+            for (int each_bit = 0; each_bit < step.size(); ++each_bit) {
+                step[each_bit] = step[each_bit] + each_monkey->position[each_bit];
             }
-            new_fitness = cost_evaluation(temp_position);
+            new_fitness = cost_evaluation(step);
             evaluate_times++;
             if (new_fitness < each_monkey->fitness) {
-                each_monkey->position = temp_position;
+                each_monkey->position = step;
                 each_monkey->fitness = new_fitness;
             }
         }
@@ -117,7 +113,8 @@ void jump(Monkey &monkey, int start_bit, int device_number) {
     start_bit = 0;
     candidate.assign(monkey.position.begin(), monkey.position.end());
     temp.resize(device_number);
-    write_vector_range(temp, monkey.position, start_bit);
+    // write_vector_range(temp, monkey.position, start_bit);
+    temp = read_vector_range(candidate, start_bit, start_bit + device_number);
     temp = large_step(temp);
     write_vector_range(candidate, temp, start_bit);
     new_fitness = cost_evaluation(candidate);
@@ -272,7 +269,7 @@ template <typename T> vector<T> read_vector_range(vector<T> vec, int start_index
 template <typename T> void write_vector_range(vector<T> &target_vec, vector<T> source_vec, int start_index) {
 
     for (int index = 0; index < min(target_vec.size(), source_vec.size()); ++index) {
-        target_vec[index + start_index] = source_vec[index];
+        target_vec[start_index + index] = source_vec[index];
     }
 }
 
