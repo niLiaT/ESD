@@ -196,6 +196,7 @@ Good Searcher::invest(Good good) {
     int start_bit = rand() % good.utility.size();
     int length = 5, random_index;
     int size = good.utility.size();
+    double crossover_rate = 0.6, mutation_rate = 0.1;
     vector<bool> id_bits(good.id_bits_number);
 
     this->candidate_investment = this->investment;
@@ -204,16 +205,20 @@ Good Searcher::invest(Good good) {
     }
 
     //Crossover
-    for (int index = 0; index < length; ++index) {
-        temp = this->candidate_investment[(start_bit + index) % size];
-        this->candidate_investment[(start_bit + index) % size] = good.utility[(start_bit + index) % size];
-        good.utility[(start_bit + index) % size] = temp;
+    if ((double)rand() / (double)RAND_MAX < crossover_rate) {
+        for (int index = 0; index < length; ++index) {
+            temp = this->candidate_investment[(start_bit + index) % size];
+            this->candidate_investment[(start_bit + index) % size] = good.utility[(start_bit + index) % size];
+            good.utility[(start_bit + index) % size] = temp;
+        }
     }
 
     //Mutation
-    random_index = rand() % size;
-    this->candidate_investment[random_index] = ~this->candidate_investment[random_index];
-    good.utility[random_index] = !good.utility[random_index];
+    if ((double)rand() / (double)RAND_MAX < mutation_rate) {
+        random_index = rand() % size;
+        this->candidate_investment[random_index] = ~this->candidate_investment[random_index];
+        good.utility[random_index] = !good.utility[random_index];
+    }
 
     for (int each_bit = 0; each_bit < id_bits.size(); ++each_bit) {
         good.utility.at(each_bit) = id_bits.at(each_bit);
