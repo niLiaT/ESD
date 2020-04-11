@@ -5,6 +5,7 @@
 #include <vector>
 #include <math.h>
 #include "connection.h"
+#include <algorithm>
 
 using namespace std;
 

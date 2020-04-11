@@ -2,7 +2,8 @@
 
 #define max_number 10
 #define parents_number 2
-#define mutation_rate 0.3
+#define crossover_rate 0.05
+#define mutation_rate 0.01
 
 // template <typename T> int sgn (T val);
 template <typename T> vector<T> read_vector_range(vector<T> vec, int start_index, int count);
@@ -178,19 +179,27 @@ void crossover_mutation(vector<Monkey> &monkeys) {
     int random_bit;
     int random_monkey1;
     int random_monkey2;
+    bool temp;
     // double temp_fitness;
     vector<Monkey> candidate = monkeys;
+    vector<int> pair(monkeys.size());
 
-    for (int crossover_number = 0; crossover_number < parents_number; ++crossover_number) {
-        random_monkey1 = rand() % monkeys.size();
-        random_monkey2 = rand() % monkeys.size();
-        random_bit = rand() % candidate[0].position.size();
-
-        swap(candidate[random_monkey1].position[random_bit], candidate[random_monkey2].position[random_bit]);
+    for (int index = 0; index < pair.size(); ++index) {
+        pair.at(index) = index;
+    }
+    random_shuffle(pair.begin(), pair.end());
+    for (int each_pair = 0, index = 0; each_pair < pair.size() / 2; ++each_pair) {
+        if ((double)rand() / (double)RAND_MAX < crossover_rate) {
+            index = each_pair * 2;
+            random_bit = rand() % candidate.at(pair.at(each_pair)).position.size();
+            temp = candidate.at(pair.at(index)).position.at(random_bit);
+            candidate.at(pair.at(index)).position.at(random_bit) = candidate.at(pair.at(index + 1)).position.at(random_bit);
+            candidate.at(pair.at(index + 1)).position.at(random_bit) = temp;
+        }
     }
 
     for (vector<Monkey>::iterator each_candidate = candidate.begin(); each_candidate != candidate.end(); ++each_candidate) {
-        if (rand() / RAND_MAX < mutation_rate) {
+        if ((double)rand() / (double)RAND_MAX < mutation_rate) {
             random_bit = rand() % each_candidate->position.size();
             each_candidate->position[random_bit] = !each_candidate->position[random_bit];
         }
@@ -232,7 +241,7 @@ void somersault(vector<Monkey> &monkeys) {
                 }
             }
 
-            new_fitness = cost_evaluation(each_monkey->position);
+            new_fitness = cost_evaluation(temp);
             evaluate_times++;
             if (new_fitness < each_monkey->fitness) {
                 each_monkey->fitness = new_fitness;
