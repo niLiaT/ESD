@@ -4,7 +4,7 @@ int evaluate_times = 0;
 
 void se(int max_evaluate_times, int dimension, int region_quantity, int searcher_quantity, int good_quantity, int player_quantity) {
     vector<Region> regions; //Regions of a market
-    Good optimal_good = Good(0);
+    double optimal_fitness;
 
     regions = initialization(region_quantity, searcher_quantity, good_quantity, dimension);
 
@@ -13,9 +13,9 @@ void se(int max_evaluate_times, int dimension, int region_quantity, int searcher
     while (evaluate_times < max_evaluate_times) {
         vision_search(regions, player_quantity); //Section II.D in the paper
 
-        optimal_good = marketing_research(regions); //Section II.E in the paper
+        optimal_fitness = marketing_research(regions); //Section II.E in the paper
 
-        cout << evaluate_times << "," << optimal_good.price << endl;
+        cout << evaluate_times << "," << optimal_fitness << endl;
     }
 }
 
@@ -143,10 +143,9 @@ void vision_search(vector<Region> &regions, int player_quantity) {
     }
 }
 
-Good marketing_research(vector<Region> &regions) {
+double marketing_research(vector<Region> &regions) {
     vector<Good>::iterator worst_good;
-    Good optimal = Good(0);
-    optimal.price = DBL_MAX;
+    double optimal_price = DBL_MAX;
 
     for (vector<Region>::iterator each_region = regions.begin(); each_region != regions.end(); ++each_region) {
         //Update the candidate good of each region
@@ -172,9 +171,14 @@ Good marketing_research(vector<Region> &regions) {
             }
         }
 
-        //Find the best good of the market
-        if (each_region->best_good->price < optimal.price) {
-            optimal = *(each_region->best_good);
+        //Find the best good or investment of the market
+        if (each_region->best_good->price < optimal_price) {
+            optimal_price = each_region->best_good->price;
+        }
+        for (vector<Searcher>::iterator each_searcher = each_region->searchers.begin(); each_searcher != each_region->searchers.end(); ++each_searcher) {
+            if (each_searcher->profit < optimal_price) {
+                optimal_price = each_searcher->profit;
+            }
         }
 
         //Update the investment record
@@ -188,7 +192,7 @@ Good marketing_research(vector<Region> &regions) {
         }
     }
 
-    return optimal;
+    return optimal_price;
 }
 
 Good Searcher::invest(Good good) {
