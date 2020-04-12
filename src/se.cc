@@ -173,7 +173,7 @@ Good marketing_research(vector<Region> &regions) {
         }
 
         //Find the best good of the market
-        if (each_region->best_good->id_bits_number < optimal.price) {
+        if (each_region->best_good->price < optimal.price) {
             optimal = *(each_region->best_good);
         }
 
