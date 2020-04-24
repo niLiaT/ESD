@@ -92,5 +92,6 @@ extern vector<Agv> agvs;
 void input(char *);
 void connect(vector<bool>);
 double cost_evaluation(vector<bool>);
+void find_loading(vector<bool>);
 
 #endif
