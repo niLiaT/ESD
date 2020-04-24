@@ -120,8 +120,6 @@ void connect(vector<bool> device_status) {
     double shortest = DBL_MAX;
     int counter = 0;
     double temp;
-    void *layer;
-    void *upper_layer;
 
     for (vector<bool>::iterator each_bit = device_status.begin(); each_bit != device_status.end(); ++each_bit) {
         if (counter < gate_way_number) {
@@ -152,6 +150,7 @@ void connect(vector<bool> device_status) {
     }
 
     for (vector<Agv>::iterator each_agv = agvs.begin(); each_agv != agvs.end(); ++each_agv) {
+        shortest = DBL_MAX;
         for (vector<Edge_device>::iterator each_edge_device = edge_devices.begin(); each_edge_device != edge_devices.end(); ++each_edge_device) {
             if ((*each_edge_device).status) {
                 if ((temp = distance((*each_agv).x, (*each_agv).y, (*each_edge_device).x, (*each_edge_device).y)) < shortest) {
@@ -170,9 +169,8 @@ void connect(vector<bool> device_status) {
         }
     }
 
-    shortest = DBL_MAX;
-
     for (vector<Edge_device>::iterator each_edge_device = edge_devices.begin(); each_edge_device != edge_devices.end(); ++each_edge_device) {
+        shortest = DBL_MAX;
         if ((*each_edge_device).status) {
             for (vector<Fog_device>::iterator each_fog_device = fog_devices.begin(); each_fog_device != fog_devices.end(); ++each_fog_device) {
                 if ((*each_fog_device).status) {
@@ -193,9 +191,8 @@ void connect(vector<bool> device_status) {
         }
     }
 
-    shortest = DBL_MAX;
-
     for (vector<Fog_device>::iterator each_fog_device = fog_devices.begin(); each_fog_device != fog_devices.end(); ++each_fog_device) {
+        shortest = DBL_MAX;
         if ((*each_fog_device).status) {
             for (vector<Gate_way>::iterator each_gate_way = gate_ways.begin(); each_gate_way != gate_ways.end(); ++each_gate_way) {
                 if ((*each_gate_way).status) {
