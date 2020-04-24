@@ -62,6 +62,7 @@ void Bat::movement(Bat leader) {
     for (int each_bit = 0; each_bit < this->distribution.size(); ++each_bit) {
         this->distribution[each_bit] = this->position[each_bit] + (2 * ((double)rand() / (RAND_MAX + 1.0)) - 1) * ((double)rand() / (RAND_MAX + 1.0));
         if ((double)rand() / (RAND_MAX + 1.0) < 1 / (1 + exp(-this->distribution[each_bit])))
+            // this->candidate[each_bit] = ~this->candidate[each_bit];
             this->candidate[each_bit] = 1;
             // this->candidate[each_bit] = leader.position[each_bit];
         else
@@ -80,14 +81,15 @@ void Bat::movement(Bat leader) {
     for (int each_bit = 0; each_bit < this->distribution.size(); ++each_bit) {
         this->distribution[each_bit] = this->velocity[each_bit];
         if ((double)rand() / (RAND_MAX + 1.0) < (1 / (1 + exp(-this->distribution[each_bit]))))
-            this->candidate[each_bit] = 1;
-        else
-            this->candidate[each_bit] = 0;
+            this->candidate[each_bit] = ~this->candidate[each_bit];
+        //     this->candidate[each_bit] = 1;
+        // else
+        //     this->candidate[each_bit] = 0;
     }
 
     this->candidate_fitness = cost_evaluation(this->candidate);
 
-    if ( (double)rand() / (RAND_MAX + 1.0) < loudness && this->candidate_fitness <= leader.fitness) {
+    if ( (double)rand() / (RAND_MAX + 1.0) < loudness) {// && this->candidate_fitness <= leader.fitness) {
         this->position = this->candidate;
         this->fitness = this->candidate_fitness;
     }
