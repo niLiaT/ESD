@@ -323,7 +323,24 @@ double cost_evaluation(vector<bool> solution) {
     return cost;
 }
 
-void find_loading(vector<bool> solution) {
+Priority find_loading(vector<bool> solution) {
+    Priority loading;
+    
+    int each_bit = 0;
+
     connect(solution);
 
+    for (; each_bit < gate_way_number; ++each_bit) {
+        loading.gate_way_loading.insert(pair<int, int> (gate_ways.at(each_bit).link_quantity, each_bit));
+    }
+
+    for (; each_bit < gate_way_number + fog_device_number; ++each_bit) {
+        loading.fog_device_loading.insert(pair<int, int> (fog_devices.at(each_bit - gate_way_number).link_quantity, each_bit));
+    }
+
+    for (; each_bit < gate_way_number + fog_device_number + edge_device_number; ++each_bit) {
+        loading.edge_device_loading.insert(pair<int, int> (edge_devices.at(each_bit - gate_way_number - fog_device_number).link_quantity, each_bit));
+    }
+
+    return loading;
 }

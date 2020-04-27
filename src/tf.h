@@ -3,10 +3,11 @@
 
 #include <iostream>
 #include <vector>
+#include <map>
 #include "connection.h"
 
 using namespace std;
 
-void tf();
+void tf(int);
 
 #endif

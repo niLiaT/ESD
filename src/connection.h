@@ -7,6 +7,7 @@
 #include <math.h>
 #include <time.h>
 #include <float.h>
+#include <map>
 
 using namespace std;
 
@@ -14,6 +15,12 @@ extern int gate_way_number;
 extern int fog_device_number;
 extern int edge_device_number;
 extern int agv_number;
+
+struct Priority {
+    multimap<int, int, greater<int>> gate_way_loading;
+    multimap<int, int, greater<int>> fog_device_loading;
+    multimap<int, int, greater<int>> edge_device_loading;
+};
 
 class Gate_way {
 public:
@@ -92,6 +99,6 @@ extern vector<Agv> agvs;
 void input(char *);
 void connect(vector<bool>);
 double cost_evaluation(vector<bool>);
-void find_loading(vector<bool>);
+Priority find_loading(vector<bool>);
 
 #endif
