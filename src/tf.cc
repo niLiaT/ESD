@@ -14,9 +14,15 @@ void tf(int solution_length) {
 
     for (multimap<int, int, greater<int> >::iterator each_gate_way = priority.gate_way_loading.begin(); each_gate_way != priority.gate_way_loading.end(); ++each_gate_way) {
         solution.at(each_gate_way->second) = true;
+        for (vector<bool>::iterator bit = solution.begin() + gate_way_number; bit != solution.begin() + gate_way_number + fog_device_number; ++bit) {
+            *bit = false;
+        }
         
         for (multimap<int, int, greater<int> >::iterator each_fog_device = priority.fog_device_loading.begin(); each_fog_device != priority.fog_device_loading.end(); ++each_fog_device) {
             solution.at(each_fog_device->second) = true;
+            for (vector<bool>::iterator bit = solution.begin() + gate_way_number + fog_device_number; bit != solution.end(); ++bit) {
+                *bit = false;
+            }
 
             for (multimap<int, int, greater<int> >::iterator each_edge_device = priority.edge_device_loading.begin(); each_edge_device != priority.edge_device_loading.end(); ++each_edge_device) {
                 solution.at(each_edge_device->second) = true;
@@ -26,6 +32,7 @@ void tf(int solution_length) {
                 if (candidate_fitness < fitness) {
                     fitness = candidate_fitness;
                 }
+
                 cout << counter << "," << fitness << endl;
             }
         }
