@@ -12,13 +12,13 @@ void tf(int solution_length) {
         *each_bit = false;
     }
 
-    for (multimap<int, int, greater<int>>::iterator each_gate_way = priority.gate_way_loading.begin(); each_gate_way != priority.gate_way_loading.end(); ++each_gate_way) {
+    for (multimap<int, int, greater<int> >::iterator each_gate_way = priority.gate_way_loading.begin(); each_gate_way != priority.gate_way_loading.end(); ++each_gate_way) {
         solution.at(each_gate_way->second) = true;
         
-        for (multimap<int, int, greater<int>>::iterator each_fog_device = priority.fog_device_loading.begin(); each_fog_device != priority.fog_device_loading.end(); ++each_fog_device) {
+        for (multimap<int, int, greater<int> >::iterator each_fog_device = priority.fog_device_loading.begin(); each_fog_device != priority.fog_device_loading.end(); ++each_fog_device) {
             solution.at(each_fog_device->second) = true;
 
-            for (multimap<int, int, greater<int>>::iterator each_edge_device = priority.edge_device_loading.begin(); each_edge_device != priority.edge_device_loading.end(); ++each_edge_device) {
+            for (multimap<int, int, greater<int> >::iterator each_edge_device = priority.edge_device_loading.begin(); each_edge_device != priority.edge_device_loading.end(); ++each_edge_device) {
                 solution.at(each_edge_device->second) = true;
 
                 candidate_fitness = cost_evaluation(solution);

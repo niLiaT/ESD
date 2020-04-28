@@ -17,9 +17,9 @@ extern int edge_device_number;
 extern int agv_number;
 
 struct Priority {
-    multimap<int, int, greater<int>> gate_way_loading;
-    multimap<int, int, greater<int>> fog_device_loading;
-    multimap<int, int, greater<int>> edge_device_loading;
+    multimap<int, int, greater<int> > gate_way_loading;
+    multimap<int, int, greater<int> > fog_device_loading;
+    multimap<int, int, greater<int> > edge_device_loading;
 };
 
 class Gate_way {
