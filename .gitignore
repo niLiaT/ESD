@@ -44,3 +44,6 @@ dataset/*
 
 #test file
 test/*
+
+#binary
+bin/*
