@@ -11,13 +11,8 @@ int main(int argc, char *argv[]) {
     char *dataset = argv[1];
     int iterations = atoi(argv[2]);
     int solution_length = atoi(argv[3]);
-<<<<<<< HEAD
     int regions = atoi(argv[4]);
     int searchers = atoi(argv[5]);
-=======
-    int regions = atoi(argv[5]);
-    int searchers = atoi(argv[4]);
->>>>>>> f17b841cf00aefa0bb2a8cdedb203f9b88580620
     int goods = atoi(argv[6]);
     int players = atoi(argv[7]);
 
