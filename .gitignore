@@ -25,11 +25,13 @@
 *.la
 *.a
 *.lib
+*.dSYM
 
 # Executables
 *.exe
 *.out
 *.app
+bin/*
 
 # VSCode configuration
 .vscode
