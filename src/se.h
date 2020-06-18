@@ -6,6 +6,7 @@
 #include "connection.h"
 #include <algorithm>
 #include <tuple>
+#include <math.h>
 
 using namespace std;
 
@@ -41,6 +42,7 @@ public:
     // vector<bool> id_bits; //Identity bits
     pair<int, int> id_bits_range; // The range of identity bits number of the region
     vector<Good>::iterator best_good; //Best good of a region
+    double average_hamming_distance; //Average hamming distance between each goods and the best one
     double mu, nu, rho;
     double expected_value; //E
     void reset_id_bits(); //Reset identity bits to insure a good still stay in the region after 

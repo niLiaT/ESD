@@ -1,5 +1,7 @@
 #include "se.h"
 
+int hamming_distance(vector<bool>, vector<bool>);
+
 int evaluate_times = 0;
 
 void se(int max_evaluate_times, int dimension, int region_quantity, int searcher_quantity, int good_quantity, int player_quantity) {
@@ -121,8 +123,22 @@ void vision_search(vector<Region> &regions) {
 }
 
 void trade(vector<Region> &regions, int player_quantity) {
+    vector<Region>::iterator longest_distance = regions.begin();
     vector<Region>::iterator defending_champion;
     vector<Region>::iterator challenger;
+
+    for (vector<Region>::iterator each_region = regions.begin(); each_region != regions.end(); ++each_region) {
+        each_region->average_hamming_distance = 0;
+        for (vector<Good>::iterator each_good = each_region->goods.begin(); each_good != each_region->goods.end(); ++each_good) {
+            each_region->average_hamming_distance += hamming_distance(each_region->best_good->utility, each_good->utility);
+        }
+        each_region->average_hamming_distance /= each_region->goods.size();
+        if (longest_distance->average_hamming_distance < each_region->average_hamming_distance) {
+            longest_distance = each_region;
+        }
+    }
+
+    longest_distance->expected_value = pow(exp(longest_distance->expected_value) / 2.71828183, 0.7);
 
     //Determination by tournament
     for (vector<Region>::iterator each_region = regions.begin(); each_region != regions.end(); ++each_region) {
@@ -334,4 +350,14 @@ void Region::reset_id_bits () {
             }
         }
     }
+}
+
+int hamming_distance(vector<bool> solution1, vector<bool> solution2) {
+    int distance = 0;
+
+    for (int index = 0; index < solution1.size(); ++index) {
+        distance += solution1.at(index) ^ solution2.at(index);
+    }
+
+    return distance;
 }
