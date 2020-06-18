@@ -49,7 +49,8 @@ public:
 void se(int, int, int, int, int, int);
 vector<Region> initialization(int, int, int, int);
 void resource_arrangement(vector<Region> &);
-void vision_search(vector<Region> &, int);
+void vision_search(vector<Region> &);
+void trade(vector<Region> &, int);
 double marketing_research(vector<Region> &);
 
 #endif

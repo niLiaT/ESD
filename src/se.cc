@@ -11,7 +11,9 @@ void se(int max_evaluate_times, int dimension, int region_quantity, int searcher
     resource_arrangement(regions); //Section II.C in the paper
 
     while (evaluate_times < max_evaluate_times) {
-        vision_search(regions, player_quantity); //Section II.D in the paper
+        vision_search(regions); //Section II.D in the paper
+
+        trade(regions, player_quantity);
 
         optimal_fitness = marketing_research(regions); //Section II.E in the paper
 
@@ -61,15 +63,13 @@ void resource_arrangement(vector<Region> &regions) {
     }
 }
 
-void vision_search(vector<Region> &regions, int player_quantity) {
+void vision_search(vector<Region> &regions) {
     int random_index = 0;
     double investment_record = 0.0; //Mu
     double average_profit = 0.0; //Nu
     double best_price = 0.0; //Rho
     double total_price = 0.0;
     vector<Searcher>::iterator worst_searcher;
-    vector<Region>::iterator defending_champion;
-    vector<Region>::iterator challenger;
 
     //Transition
     for (vector<Region>::iterator each_region = regions.begin(); each_region != regions.end(); ++each_region) {
@@ -118,6 +118,11 @@ void vision_search(vector<Region> &regions, int player_quantity) {
         //Calculate the expected value, formula (1)
         each_region->expected_value = each_region->mu * each_region->nu * each_region->rho;
     }
+}
+
+void trade(vector<Region> &regions, int player_quantity) {
+    vector<Region>::iterator defending_champion;
+    vector<Region>::iterator challenger;
 
     //Determination by tournament
     for (vector<Region>::iterator each_region = regions.begin(); each_region != regions.end(); ++each_region) {
