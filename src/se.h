@@ -34,7 +34,7 @@ class Region {
 public:
     Region(int, int, int);
     int invested_times; //t_a
-    int univested_times; //t_b
+    int uninvested_times; //t_b
     vector<Searcher> searchers; //Searchers who invest in the region
     vector<Searcher> candidate_searchers; //Temporary searchers of the region
     vector<Good> goods; //Goods of the region

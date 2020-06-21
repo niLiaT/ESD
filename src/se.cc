@@ -91,7 +91,8 @@ void vision_search(vector<Region> &regions) {
     //Calculate expected value
     for (vector<Region>::iterator each_region = regions.begin(); each_region != regions.end(); ++each_region) {
         //Calculate mu, formula (2)
-        investment_record = (double)(each_region->univested_times) / (double)(each_region->invested_times);
+        // investment_record = (double)(each_region->uninvested_times) / (double)(each_region->invested_times);
+        investment_record = (double)(each_region->invested_times) / (double)(each_region->uninvested_times);
         each_region->mu = investment_record;
 
         //Calculate nu, formula (3)
@@ -204,12 +205,12 @@ double marketing_research(vector<Region> &regions) {
 
         //Update the investment record
         if (each_region->searchers.size() > 0) {
-            each_region->univested_times = 1;
+            each_region->uninvested_times = 1;
             each_region->invested_times += each_region->searchers.size();
         }
         else {
             each_region->invested_times = 1;
-            each_region->univested_times += 1;
+            each_region->uninvested_times += 1;
         }
     }
 
@@ -296,7 +297,7 @@ Region::Region(int searcher_quantity, int goods_quantity, int dimension) {
         *each_good = Good(dimension);
     }
     this->invested_times = 1;
-    this->univested_times = 1;
+    this->uninvested_times = 1;
     this->expected_value = 0.0;
     this->mu = 0.0;
     this->nu = 0.0;
