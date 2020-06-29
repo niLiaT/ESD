@@ -329,18 +329,18 @@ void Region::reset_id_bits () {
     for (vector<Good>::iterator each_good = this->goods.begin(); each_good != this->goods.end(); ++each_good) {
         temp_id_bits.assign(each_good->utility.begin(), each_good->utility.begin() + each_good->id_bits_number);
 
-        index_1 = each_good->utility.begin() + (rand() % each_good->id_bits_number);
-        index_2 = each_good->utility.begin() + (rand() % each_good->id_bits_number);
-
-        iter_swap(index_1, index_2);
-
         do {
+            for (int index = 0; index < each_good->id_bits_number; ++index) {
+                each_good->utility.at(index) = temp_id_bits.at(index);
+            }
+
+            index_1 = each_good->utility.begin() + (rand() % each_good->id_bits_number);
+            index_2 = each_good->utility.begin() + (rand() % each_good->id_bits_number);
+            iter_swap(index_1, index_2);
+
             index_3 = rand() % each_good->id_bits_number;
             each_good->utility[index_3] = !each_good->utility[index_3];
         } while (!check_sum(each_good->utility, each_good->id_bits_number, this->id_bits_range));
-
-        index_3 = rand() % each_good->id_bits_number;
-        each_good->utility[index_3] = !each_good->utility[index_3];
 
         if ((temp_price = cost_evaluation(each_good->utility)) < each_good->price) {
             each_good->price = temp_price;
