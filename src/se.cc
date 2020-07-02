@@ -7,6 +7,8 @@ int evaluate_times = 0;
 void se(int max_evaluate_times, int dimension, int region_quantity, int searcher_quantity, int good_quantity, int player_quantity) {
     vector<Region> regions; //Regions of a market
     double optimal_fitness;
+    double optimal_searcher = DBL_MAX;
+    double optimal_goods = DBL_MAX;
 
     regions = initialization(region_quantity, searcher_quantity, good_quantity, dimension);
 
@@ -17,9 +19,9 @@ void se(int max_evaluate_times, int dimension, int region_quantity, int searcher
 
         trade(regions, player_quantity);
 
-        optimal_fitness = marketing_research(regions); //Section II.E in the paper
+        optimal_fitness = marketing_research(regions, optimal_searcher, optimal_goods); //Section II.E in the paper
 
-        cout << evaluate_times << "," << optimal_fitness << endl;
+        cout << evaluate_times << "," << optimal_searcher << "," << optimal_goods << endl;
     }
 }
 
@@ -165,7 +167,7 @@ void trade(vector<Region> &regions, int player_quantity) {
     }
 }
 
-double marketing_research(vector<Region> &regions) {
+double marketing_research(vector<Region> &regions, double &optimal_searcher, double &optimal_goods) {
     vector<Good>::iterator worst_good;
     double optimal_price = DBL_MAX;
 
@@ -200,6 +202,15 @@ double marketing_research(vector<Region> &regions) {
         for (vector<Searcher>::iterator each_searcher = each_region->searchers.begin(); each_searcher != each_region->searchers.end(); ++each_searcher) {
             if (each_searcher->profit < optimal_price) {
                 optimal_price = each_searcher->profit;
+            }
+        }
+
+        if (each_region->best_good->price < optimal_goods) {
+            optimal_goods = each_region->best_good->price;
+        }
+        for (vector<Searcher>::iterator each_searcher = each_region->searchers.begin(); each_searcher != each_region->searchers.end(); ++each_searcher) {
+            if (each_searcher->profit < optimal_searcher) {
+                optimal_searcher = each_searcher->profit;
             }
         }
 

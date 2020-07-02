@@ -53,6 +53,6 @@ vector<Region> initialization(int, int, int, int);
 void resource_arrangement(vector<Region> &);
 void vision_search(vector<Region> &);
 void trade(vector<Region> &, int);
-double marketing_research(vector<Region> &);
+double marketing_research(vector<Region> &, double &, double &);
 
 #endif
