@@ -71,6 +71,7 @@ void vision_search(vector<Region> &regions) {
     double average_profit = 0.0; //Nu
     double best_price = 0.0; //Rho
     double total_price = 0.0;
+    double total_expected_value = 0.0;
     vector<Searcher>::iterator worst_searcher;
 
     //Transition
@@ -119,7 +120,13 @@ void vision_search(vector<Region> &regions) {
         each_region->rho = best_price;
 
         //Calculate the expected value, formula (1)
-        each_region->expected_value = each_region->mu * each_region->nu * each_region->rho;
+        each_region->expected_value = 1.0 / (each_region->mu * each_region->nu * each_region->rho);
+
+        total_expected_value += each_region->expected_value;
+    }
+
+    for (vector<Region>::iterator each_region = regions.begin(); each_region != regions.end(); ++each_region) {
+        each_region->expected_value = each_region->expected_value / total_expected_value;
     }
 }
 
@@ -128,6 +135,7 @@ void trade(vector<Region> &regions, int player_quantity) {
     vector<Region>::iterator defending_champion;
     vector<Region>::iterator challenger;
 
+    //Calculate hamming distance
     for (vector<Region>::iterator each_region = regions.begin(); each_region != regions.end(); ++each_region) {
         each_region->average_hamming_distance = 0;
         for (vector<Good>::iterator each_good = each_region->goods.begin(); each_good != each_region->goods.end(); ++each_good) {
