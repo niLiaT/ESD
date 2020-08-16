@@ -11,11 +11,11 @@
   |\_\_dmga.out: object file of discrete monkey genetic algorithm  
   |\_\_bat.out: object file of binary bat algorithm  
   |\_\_ga.out: object file of genetic algorithm  
-  |\_\_tf.out: object file of top first
+  |\_\_tf.out: object file of top first  
   |\_\_s_g_compare.out: object file of the comparison experiment of searcher and goods  
   |\_\_generator.out: object file of dataset generator  
 * dataset  
-  |\_\_generator.cc: c++ file of dataset generator
+  |\_\_generator.cc: c++ file of dataset generator  
   |\_\_taipei_cartesian.txt: dataset of base station in taipei in forms of cartesian coordinates  
   |\_\_taipei_gps.txt: dataset of base station in taipei in forms of geographic coordinate system
   * dataset naming rule: gateway_fog_edge_user_x_y.txt
@@ -29,10 +29,10 @@
 * script  
   |\_\_cal_statistics.sh: shell script to calculate average value of a experiment  
   |\_\_others: shell script of experiments
-* source
-  |\_\_connection.cc: connect the devices and calculate objective value
-  |\_\_se.cc: search economics
-  |\_\_main.cc: driver
+* source  
+  |\_\_connection.cc: connect the devices and calculate objective value  
+  |\_\_se.cc: search economics  
+  |\_\_main.cc: driver  
 
 ## Compile
 * SE
