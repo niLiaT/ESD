@@ -34,23 +34,27 @@
   |\_\_se.cc: search economics  
   |\_\_main.cc: driver  
 
-## Compile
+## Execute
 * SE
 ```
-g++ ($algorithm).out ($dataset).txt $iteration $solution_length $regions $searchers $goods $players
+./bin/($algorithm).out ($dataset).txt $iteration $solution_length $regions $searchers $goods $players
 ```
 * DMGA
 ```
-g++ dmga.out ($dataset).txt $iteration $solution_length $population
+./bin/dmga.out ($dataset).txt $iteration $solution_length $population
 ```
 * BAT
 ```
-g++ bat.out ($dataset).txt $iteration $solution_length $polpulation
+./bin/bat.out ($dataset).txt $iteration $solution_length $polpulation
 ```
 * GA
 ```
-g++ ga.out ($dataset).txt $iteration $solution_length $population $players $crossover_rate $mutation_rate
+./bin/ga.out ($dataset).txt $iteration $solution_length $population $players $crossover_rate $mutation_rate
 ```
 * TF
 ```
-g++ tf.out ($dataset).txt $solution_length
+./bin/tf.out ($dataset).txt $solution_length
+```
+
+## Compile
+g++ src/main.cc src/connection.cc src/($algo).cc -O3 -o ($algo).out
